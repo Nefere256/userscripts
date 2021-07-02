@@ -10,7 +10,6 @@
 // ==/UserScript==
 
 /* TODO:
-+ partial translate of links (not full texts)
 * complex queries
 ** item rating refreshing after time (observe - rating_label doesnt work),
 ** get a translation from company names ?? (from entry pages - like 世嘉  => SEGA)
@@ -21,7 +20,6 @@
 
 /* places that doesn't work:
 * home page
-** user avatar list on top nav
 ** 'star' window - owning pop up
 * 'item' homepage
 ** database section tabs and entries info
@@ -32,6 +30,8 @@
 ** rate part
 ** top nav action sublists
 ** related figures section (under main pic)
+** re-releases (like https://www.hpoi.net/hobby/51360)
+** wish for release? (yellow gift with heart, https://www.hpoi.net/hobby/51)
 * database search page
 ** basic filters line
 ** more filters side box
@@ -39,7 +39,7 @@
 
 places that doesn't work AT ALL:
 * user page
-* use collection
+* user collection
 * settings
 * pics
 * albums
@@ -55,7 +55,6 @@ low priority:
 * item entry page
 ** selling new ad
 ** selling preowned info
-** contributions detailed info
 ** report info on brief reviews
 ** magical table
 ** post comment section
@@ -110,6 +109,15 @@ const TRANSLATIONS = {
 			'二手专区' : 'Preowned',
       '淘宝自营店' : 'Taobao own shop',
       '淘宝天狗店' : 'Taobao Tengu shop',
+    },
+    'nav_top_personal' : {
+      '个人中心' : 'Profile',
+      '我的收藏' : 'Favorites',
+      '返现申请' : 'Cashback',
+      '好友' : 'Friends',
+      '消息' : 'Messages',
+      '账号设置' : 'Settings',
+      '退出' : 'Logout',
     },
     'nav_top_search_drop_list' : {
       '全部周边' : 'All',
@@ -216,6 +224,12 @@ const TRANSLATIONS = {
       '微妙' : 'so-so',
 			'邪神' : 'Cthulhu'
     },
+    'item_contribution_type' : {
+      '创建' : 'Created',
+      '更新资料' : 'Updated info',
+      '更新封面' : 'Updated main pic',
+      '更新发售/版本' : 'Updated release/version',
+  },
     'hpoi_box_title' : {
       /* main page */
       '大家在看' : 'Everyone\'s watching',
@@ -270,9 +284,16 @@ const TRANSLATIONS = {
     	'发售时间表' : 'Release date',
   	},
     'search_item_props' : {
-      '厂商' : 'Man',
-      '出荷' : 'Rele.',
-      '新增' : 'Add.',
+      '厂商' : 'Man', // manufacturer
+      '出荷' : 'Rele.', // Release date
+      '新增' : 'Add.', // Addition date
+      '价格' : 'Price', // Price
+      '愿望' : 'Wish', // Wished by x people
+      '浏览' : 'Hits', // how many views
+      '评分' : 'Rate', // overal rate
+      //collection only
+      '途径' : 'Way', // channel? shop? shipment?
+      '补款' : 'Due', // how many money yet to paid
     },
     
     
@@ -301,34 +322,36 @@ const TRANSLATIONS = {
   
 const PLACES = {
   /* NAV TOP BAR */
-  'nav_top_left_menu' : '.hpoi-nav-tabbox > .nav-conters-left > li > a',
-  'nav_top_left_submenu' : '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
-  'nav_top_right_menu' : '.hpoi-nav-tabbox > .nav-conters-right > li > a',
-  'nav_top_right_get_app' : 'html body nav.nav-conters div.hpoi-nav-tabbox ul.nav-conters-right li div.icon_Mobile_phone span',
-  'nav_top_right_submenu' : '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
-  'nav_top_search_drop_list' : '.nav-conters-right .dropdown-menu > li > a',
-  'nav_top_search_drop_list_default' : '#searchItemTypeText',
+  'nav_top_left_menu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > a',
+  'nav_top_left_submenu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
+  'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a',
+  'nav_top_right_get_app'	: 'html body nav.nav-conters div.hpoi-nav-tabbox ul.nav-conters-right li div.icon_Mobile_phone span',
+  'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
+  'nav_top_personal'	: '.hpoi-navpersonals > .hpoi-navpersonal > li > a',
+  'nav_top_search_drop_list'	: '.nav-conters-right .dropdown-menu > li > a',
+  'nav_top_search_drop_list_default'	: '#searchItemTypeText',
   /* OTHER */
-  'hpoi_box_title' : 'div.hpoi-box-title > .hpoi-title-left span',
-  'profile_stats' : '.user-box-content > .row > div',
-  'profile_desc' : '.user-box-content-detail > small',
+  'hpoi_box_title'	: 'div.hpoi-box-title > .hpoi-title-left span',
+  'profile_stats'	: '.user-box-content > .row > div',
+  'profile_desc'	: '.user-box-content-detail > small',
   /* HOME PAGE */
-  'home_action_type_filter' : 'div.user-home div.action-type ul.action-type-nav > li > a',
-  'home_action_type_sub_filter' : 'div.user-home div.action-type ul.action-sub-nav > li > a',
-  'home_edit_action_type' : '.home-info .home-info-content span.type-action',
-  'home_username_info_type' : 'div.home-info > .row > .home-info-content div:not(.has-user) > .user-name',
-  'home_image_type_name' : '.home-info .type-name',
+  'home_action_type_filter'	: 'div.user-home div.action-type ul.action-type-nav > li > a',
+  'home_action_type_sub_filter'	: 'div.user-home div.action-type ul.action-sub-nav > li > a',
+  'home_edit_action_type'	: '.home-info .home-info-content span.type-action',
+  'home_username_info_type'	: 'div.home-info > .row > .home-info-content div:not(.has-user) > .user-name',
+  'home_image_type_name'	: '.home-info .type-name',
   /* SEARCH PAGE*/
-  'search_page_ibox' : '.ibox > .ibox-title > h5',
-  'search_item_props' : 'ul.bs-glyphicons-list > li.detail-grid .detail-grid-info em',
-  'search_filter_button_group' : 'div[aria-label="条件"] > div > button.btn-info',
+  'search_page_ibox'	: '.ibox > .ibox-title > h5',
+  'search_item_props'	: 'ul.bs-glyphicons-list > li.detail-grid .detail-grid-info em',
+  'search_filter_button_group'	: 'div[aria-label="条件"] > div > button.btn-info',
   /* OTHER */
-  'item_prop' : '.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span',
-  'item_nav' : '.navbar-header > ul.navbar-nav > li > a',
-  'more_button' : '.hpoi-btn-border > span',
-  'rating_label' : '.rating-bar-chart > .graphFieldrating_barchart > .graphLabelrating_barchart',
-  'home-page-searchbox' : '.home-search-text',
-  'search-searchbox' : '#realPage-keyword',
+  'item_prop'	: '.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span',
+  'item_contribution_type'	: 'div.hpoi-user-content > div',
+  'item_nav'	: '.navbar-header > ul.navbar-nav > li > a',
+  'more_button'	: '.hpoi-btn-border > span',
+  'rating_label'	: '.rating-bar-chart > .graphFieldrating_barchart > .graphLabelrating_barchart',
+  'home-page-searchbox'	: '.home-search-text',
+  'search-searchbox'	: '#realPage-keyword',
 };
   
 
@@ -413,6 +436,14 @@ const translateRelativeDate = function(datesTextesReleaseDate) {
         good = "a day ago";
       else if (bad.includes('天前'))
         good = bad.replace("天前", " days ago");
+      else if (bad == "1个月前")
+        good = "a month ago";
+      else if (bad.includes('个月前'))
+        good = bad.replace("个月前", " months ago");
+      else if (bad == "1年前")
+        good = "a year ago";
+      else if (bad.includes('年前'))
+        good = bad.replace("年前", " years ago");
       else
         console.log("unresolved relative date [" + bad + "]");
       e.textContent = good;
@@ -432,7 +463,7 @@ const testTranslationMap = function (submapToCheck) {
   
 
 $(document).ready(function () {
-	console.log('translations');
+	console.log('succes 2');
   
   doTranslation('nav_top_left_menu', ['x_item_types_plural', 'nav_top_right_menu']);
   doTranslation('nav_top_left_submenu');
@@ -440,6 +471,7 @@ $(document).ready(function () {
   doTranslation('nav_top_right_menu');
   doTranslation("nav_top_right_get_app");
   doTranslation("nav_top_right_submenu");
+  doTranslation("nav_top_personal");
   doTranslation('nav_top_search_drop_list', ['nav_top_search_drop_list', 'x_item_types']);
   doTranslation('nav_top_search_drop_list_default');
   doTranslation('hpoi_box_title');
@@ -454,6 +486,9 @@ $(document).ready(function () {
   doTranslation('home_image_type_name');
 	doTranslation('item_prop');
   doTranslation('item_nav');
+  if(window.location.pathname.includes("/hobby/")) {
+     doTranslation('item_contribution_type', ['item_contribution_type']);
+     }
   doTranslation('rating_label');
 	doTranslation('more_button');
 	doTranslation('search_page_ibox');
@@ -481,8 +516,7 @@ $(document).ready(function () {
       TRANSLATIONS.en['search-searchbox']['placeholder'];
   }
 
-  
-	console.log('translating completed');
+  console.log('translating completed');
 	console.log('tests starting...');
 
   try {
@@ -494,6 +528,7 @@ $(document).ready(function () {
     testTranslationMap("nav_top_right_menu");
     testTranslationMap("nav_top_right_get_app");
     testTranslationMap("nav_top_right_submenu");
+  	testTranslationMap("nav_top_personal");
     //testTranslationMap('nav_top_search_drop_list');
     //testTranslationMap('nav_top_search_drop_list_default');
     testTranslationMap('hpoi_box_title');
@@ -504,6 +539,7 @@ $(document).ready(function () {
     if (window.location.pathname.includes("/hobby/")) {
       testTranslationMap("item_prop");
       testTranslationMap('item_nav');
+      // testTranslationMap('item_contribution_type');
     } else if (window.location.pathname.includes("/user/home")) {
       testTranslationMap("home_action_type_filter");
       testTranslationMap("home_edit_action_type");
@@ -518,5 +554,7 @@ $(document).ready(function () {
   }
   console.log('tests completed');
   });
-                    
-console.log('script loading finished');
+
+
+console.log('script loading finished');           
+  

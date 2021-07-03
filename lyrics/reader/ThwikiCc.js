@@ -4,7 +4,8 @@
 // @namespace https://takkkane.tumblr.com/scripts/lyricsReaderChinese
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that makes easier to get lyrics from Chinese Touhou Wiki pages.
-// @version  0.1
+// @version  0.1.1
+// @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/lyrics/reader/ThwikiCc.js
 // @include  https://thwiki.cc/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @require  https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js

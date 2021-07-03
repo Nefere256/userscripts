@@ -1,6 +1,11 @@
 // ==UserScript==
-// @name     Hpoi translate
-// @version  0.1
+// @name     Hpoi fan translation
+// @name:en  English translation of Hpoi.net
+// @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
+// @supportURL     https://twitter.com/TaxDelusion
+// @description A script that translates text on Hpoi website to easily navigate
+// @version  0.1.1
+// @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
 // @require  https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js

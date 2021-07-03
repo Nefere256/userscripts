@@ -4,7 +4,8 @@
 // @namespace https://takkkane.tumblr.com/scripts/lyricsReader
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that makes easier to get lyrics from Touhou Wiki pages.
-// @version  0.1.4
+// @version  0.1.5
+// @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/lyrics/reader/TouhouWikiNet.js
 // @include  https://en.touhouwiki.net/wiki/Lyrics:*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @require  https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js

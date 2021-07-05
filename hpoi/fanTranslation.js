@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates text on Hpoi website to easily navigate
-// @version  0.1.2
+// @version  0.1.3
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -20,8 +20,6 @@ TODO:
 * complex queries
 ** item rating refreshing after time (observe - rating_label doesnt work),
 ** get a translation from company names ?? (from entry pages - like 世嘉  => SEGA)
-* find proper relative time parser (sugarjs is out - doesn't support Firefox)
-* fixed tests for 'dic_first'
 
 */
 
@@ -40,17 +38,15 @@ TODO:
 ** re-releases (like https://www.hpoi.net/hobby/51360)
 ** wish for release? (yellow gift with heart, https://www.hpoi.net/hobby/51)
 * database search page
-** basic filters line
-** more filters side box
 ** release date pop up (BOXES EXIST WHEN NOT OPENED)
 
 places that doesn't work AT ALL:
 * user page
 * user collection
-* settings
+* settings!
 * pics
 * albums
-* encyclopedia entries
+* encyclopedia entries!
 * GK home page
 
 
@@ -291,10 +287,15 @@ const TRANSLATIONS = {
       '汉子' : 'Male',
       '妹子' : 'Female',
       '景品' : 'Prizes',
+      '军用' : 'Military',
       'GK' : 'Garage kits',
       '可变形' : 'Deformed',
+      '民用' : 'Civil',
+      '海上' : 'Maritime',
       '可动' : 'Movable',
-      '可脱' : 'Alternate poses',
+      '陆地' : 'On land',
+      '航空' : 'Aircraft',
+      '可脱' : 'Alternate parts',
       '需拼装' : 'To assembly',
       '未上色' : 'Uncolored',
     },
@@ -304,8 +305,52 @@ const TRANSLATIONS = {
     'search_filter_button_group_out_rating' : {
       '限制' : 'Rating: ',
     },
+    'search_filter_button_group_out_rating_list' : {
+      '不限' : 'All',
+      '全年龄' : 'All ages',
+      'R15' : 'R15',
+      'R18' : 'R18',
+      'R18+' : 'R18+',
+      'R15以下' : 'R15 and less',
+      'R18以下' : 'R18 and less',
+			'R15以上' : 'R15 and above',
+			'R18以上' : 'R18 and above',
+    },
     'search_filter_button_group_out_type' : {
       '类型' : 'Type: ',
+    },
+    'search_filter_button_group_out_type_list' : {
+      '全部' : 'All',
+      '其它' : 'Other',
+
+      '比例人形' : 'Scale figure',
+      'Q版人形' : 'Chibi figure',
+      '盒蛋/扭蛋' : 'Blind box/gacha',
+      '怪兽/机械' : 'Monster/mecha',
+      '仿真人物' : 'Real person',
+      '配件' : 'Accessory',
+      '场景' : 'Diorama',
+
+      '机甲-拼装' : 'Mecha - to assembly',
+      '机甲-完成品' : 'Mecha - completed',
+      '机甲-配件' : 'Mecha - accessory',
+      '特摄英雄' : 'Tokusatsu hero',
+      '特摄怪兽' : 'Tokusatsu monster',
+      '特摄配件' : 'Tokusatsu accessory',
+      '扭蛋/玩具' : 'Gacha/toy',
+      '驱动模型(四驱车)' : 'Vechicle (4 wheels)',
+      '驱动模型配件' : 'Vechicle accessory',
+
+      '拼装' : 'To assembly',
+      '完成品' : 'Completed',
+      '人形' : 'Person',
+      '场景配件' : 'Diorama accessory',
+      '工具材料' : 'Tool',
+
+      '拟人形' : 'Anthropomorphic',
+      '动植物' : 'Flora and fauna',
+      
+      'Doll完成品' : 'Complete doll'
     },
     'search_filter_button_group_out_view' : {
       '视图' : 'View'
@@ -316,6 +361,15 @@ const TRANSLATIONS = {
       '中' : 'Medium',
       '大' : 'Large',
       '超大': 'Very large',
+    },
+    'search_filter_more_filters_button_list' : {
+      '厂商' : 'Manufacturer',
+  		'系列' : 'Subseries',
+			'作品' : 'Series',
+      '角色' : 'Character',
+      '发售时间' : 'Release time',
+      '发售' : 'Release',
+      '入库时间' : 'Warehouse time',
     },
     'search_page_ibox' : {
     	'更多条件' : 'More filters',
@@ -339,7 +393,7 @@ const TRANSLATIONS = {
 // types (filter)
   	'x_generic_all' : {
       '全部' : 'all',
-      '不限' : 'all' // actuall - non required
+      '不限' : 'all' // actualy - non required
     },
 		
     '其它' : 'other',
@@ -392,9 +446,14 @@ const PLACES = {
   'search_filter_button_group_out_scale' : 'div[aria-label="out"] .btn-group:first > button',
   'search_filter_button_group_out_scale_all' : 'div[aria-label="out"]:first .btn-group:first> ul > li:first > a',
   'search_filter_button_group_out_rating' : 'div[aria-label="out"] .btn-group:nth-of-type(2) > button',
+  'search_filter_button_group_out_rating_list' : 'div[aria-label="out"] .btn-group:nth-of-type(2) > ul > li > a',
   'search_filter_button_group_out_type' : 'div[aria-label="out"] .btn-group:nth-of-type(3) > button',
+  'search_filter_button_group_out_type_list' : 'div[aria-label="out"] .btn-group:nth-of-type(3) > ul > li > a',
   'search_filter_button_group_out_view' : 'div[aria-label="out"] .btn-group:last > button',
   'search_filter_button_display_icon_list' : 'div[aria-label="out"]:last li > a',
+  'search_filter_more_filters_button' : '.ibox-tools > div > button.dropdown-toggle',
+  'search_filter_more_filters_button_list' : '.ibox-tools > div > ul > li > a',
+  'search_filter_more_filters_list' : '.ibox > .ibox-content > .list-group:first > .list-group-item',
   /* OTHER */
   'item_prop'	: '.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span',
   'item_contribution_type'	: 'div.hpoi-user-content > div',
@@ -566,20 +625,27 @@ $(document).ready(function () {
   }
   doTranslation('rating_label');
 	doTranslation('more_button');
-	doTranslation('search_page_ibox');
 	doTranslation('search_item_props');
-  doTranslation('search_filter_button_group');
-  doTranslation('search_filter_button_group_sort');
-  doTranslation('search_filter_button_group_out');
-  doTranslation('search_filter_button_group_out_scale', ['search_filter_button_group_out_scale']);
-  doTranslation('search_filter_button_group_out_scale', ['x_generic_all']);
-  doTranslation('search_filter_button_group_out_scale_all', ['x_generic_all']);
-  doTranslation('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating']);
-  doTranslation('search_filter_button_group_out_rating', ['x_generic_all']);
-  doTranslation('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
-  doTranslation('search_filter_button_group_out_type', ['x_item_types_plural']);
-  doTranslation('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
-	doTranslation('search_filter_button_display_icon_list');
+  if (window.location.pathname.includes('/hobby/all')) { // item search page
+		doTranslation('search_page_ibox');
+    doTranslation('search_filter_button_group');
+    doTranslation('search_filter_button_group_sort');
+    doTranslation('search_filter_button_group_out');
+    doTranslation('search_filter_button_group_out_scale', ['search_filter_button_group_out_scale']);
+    doTranslation('search_filter_button_group_out_scale', ['x_generic_all']);
+    doTranslation('search_filter_button_group_out_scale_all', ['x_generic_all']);
+    doTranslation('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating']);
+    doTranslation('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating_list']);
+    doTranslation('search_filter_button_group_out_rating_list');
+    doTranslation('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
+    doTranslation('search_filter_button_group_out_type', ['x_item_types', 'search_filter_button_group_out_type_list']);
+    doTranslation('search_filter_button_group_out_type_list');
+    doTranslation('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
+    doTranslation('search_filter_button_display_icon_list');
+    doTranslation('search_filter_more_filters_button', ['more_button']);
+    doTranslation('search_filter_more_filters_button_list');
+    doTranslation('search_filter_more_filters_list', ['search_filter_more_filters_button_list']);
+  }
   
   
   let datesCnReleaseDate = $('.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span:contains("date")').siblings('p').children('a');
@@ -619,18 +685,27 @@ $(document).ready(function () {
   	testTranslationMapForDic('nav_top_search_drop_list', ['nav_top_search_drop_list', 'x_item_types']);
     //testTranslationMap('nav_top_search_drop_list_default');
     testTranslationMap('hpoi_box_title');
-		testTranslationMap('search_page_ibox');
 		testTranslationMap('search_item_props');
-  	testTranslationMap('search_filter_button_group');
-  	testTranslationMap('search_filter_button_group_sort');
-    testTranslationMap('search_filter_button_group_out');
-  	testTranslationMapForDic('search_filter_button_group_out_scale', ['search_filter_button_group_out_scale']);
-  	testTranslationMapForDic('search_filter_button_group_out_scale', ['x_generic_all']);
-  	testTranslationMapForDic('search_filter_button_group_out_scale_all', ['x_generic_all']);
-  	testTranslationMapForDic('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating']);
-  	testTranslationMapForDic('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
-  	testTranslationMapForDic('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
-		testTranslationMap('search_filter_button_display_icon_list');
+    if (window.location.pathname.includes('/hobby/all')) {
+      testTranslationMap('search_page_ibox');
+      testTranslationMap('search_filter_button_group');
+      testTranslationMap('search_filter_button_group_sort');
+      testTranslationMap('search_filter_button_group_out');
+      testTranslationMapForDic('search_filter_button_group_out_scale', ['search_filter_button_group_out_scale']);
+      testTranslationMapForDic('search_filter_button_group_out_scale', ['x_generic_all']);
+      testTranslationMapForDic('search_filter_button_group_out_scale_all', ['x_generic_all']);
+      testTranslationMapForDic('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating']);
+      testTranslationMapForDic('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating_list']);
+      testTranslationMap('search_filter_button_group_out_rating_list');
+      testTranslationMapForDic('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
+      testTranslationMapForDic('search_filter_button_group_out_type',  ['x_item_types', 'search_filter_button_group_out_type_list']);
+      testTranslationMap('search_filter_button_group_out_type_list');
+      testTranslationMapForDic('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
+      testTranslationMap('search_filter_button_display_icon_list');
+    	testTranslationMapForDic('search_filter_more_filters_button', ['more_button']);
+      testTranslationMap('search_filter_more_filters_button_list');
+    	testTranslationMapForDic('search_filter_more_filters_list', ['search_filter_more_filters_button_list']);
+    }
     
     if (window.location.pathname.includes("/hobby/")) {
       testTranslationMap("item_prop");

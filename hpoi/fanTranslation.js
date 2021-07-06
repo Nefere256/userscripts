@@ -23,49 +23,6 @@ TODO:
 
 */
 
-/* places that doesn't work:
-* home page
-** 'star' window - owning pop up
-* 'item' homepage
-** database section tabs and entries info
-** popular items on the right column
-** latest info section tags and detailed info
-* item entry page
-** owning part
-** rate part
-** top nav action sublists
-** related figures section (under main pic)
-** re-releases (like https://www.hpoi.net/hobby/51360)
-** wish for release? (yellow gift with heart, https://www.hpoi.net/hobby/51)
-* database search page
-** release date pop up (BOXES EXIST WHEN NOT OPENED)
-
-places that doesn't work AT ALL:
-* user page
-* user collection
-* settings!
-* pics
-* albums
-* encyclopedia entries!
-* GK home page
-
-
-low priority:
-* home page
-** shop ads at left column
-** activity rankings at at left column
-** comment pop-up
-* item entry page
-** selling new ad
-** selling preowned info
-** report info on brief reviews
-** magical table
-** post comment section
-* item tags
-* /bannerItem/list
-* articles
-* /hobby/sell/amazon_jp
-
 /* worthy examples:
 * working with hpoi: https://github.com/ntzyz/hpoi-info-tgbot/blob/master/src/entry.ts
 * tricky html items: https://greasyfork.org/en/scripts/384708-bilibili-danmaku-translator/code
@@ -126,7 +83,7 @@ const TRANSLATIONS = {
       '全部周边' : 'All',
       '角色' : 'Role',
       '作品' : 'Series',
-      '系列' : 'Subseries',
+      '系列' : 'Line',
       '人物' : 'Person',
       '厂商' : 'Maker',
       '用户' : 'User',
@@ -204,10 +161,13 @@ const TRANSLATIONS = {
 			'原画：' : 'Designer:',
       '角色：' : 'Characters:',
       '作品：' : 'Origin:',
+      '版权元：' : "M. copyrights:",
       '素材：' : 'Materials:',
       '材质：' : 'Materials:',
+      '数量：' : 'Quantity:',
       '洗涤：' : 'Washing:',
       '尺寸：': 'Size:',
+      '版权：' : 'Copyrights:',
 			'原型协力：' : 'Producer:',
       '官方链接：' : 'Off. links:' ,
       '外部链接：' : 'Ref. links:',
@@ -364,7 +324,7 @@ const TRANSLATIONS = {
     },
     'search_filter_more_filters_button_list' : {
       '厂商' : 'Manufacturer',
-  		'系列' : 'Subseries',
+  		'系列' : 'Line',
 			'作品' : 'Series',
       '角色' : 'Character',
       '发售时间' : 'Release time',
@@ -388,7 +348,16 @@ const TRANSLATIONS = {
       '途径' : 'Way', // channel? shop? shipment?
       '补款' : 'Due', // how many money yet to paid
     },
-    
+    'search_modal_window_header' : {
+      '选择时间' : 'Select date period',
+    },
+    'search_modal_window_body' : { 
+      '开始：' : 'Start: ',
+      '结束：' : 'End: ',
+    },
+    'search_modal_window_footer' : {
+      '确定' : 'OK',
+    },
     
 // types (filter)
   	'x_generic_all' : {
@@ -454,6 +423,10 @@ const PLACES = {
   'search_filter_more_filters_button' : '.ibox-tools > div > button.dropdown-toggle',
   'search_filter_more_filters_button_list' : '.ibox-tools > div > ul > li > a',
   'search_filter_more_filters_list' : '.ibox > .ibox-content > .list-group:first > .list-group-item',
+  'search_modal_window_header' : '#selectDateModal .modal-header > h4.modal-title',
+  'search_modal_window_body' : "#selectDateModal .modal-body label",
+  'search_modal_window_footer' : "#selectDateModal .modal-footer > button",
+  
   /* OTHER */
   'item_prop'	: '.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span',
   'item_contribution_type'	: 'div.hpoi-user-content > div',
@@ -621,7 +594,7 @@ $(document).ready(function () {
 	doTranslation('item_prop');
   doTranslation('item_nav');
   if(window.location.pathname.includes("/hobby/")) {
-     doTranslation('item_contribution_type');
+     doTranslation('item_contribution_type', ['item_contribution_type']);
   }
   doTranslation('rating_label');
 	doTranslation('more_button');
@@ -645,6 +618,9 @@ $(document).ready(function () {
     doTranslation('search_filter_more_filters_button', ['more_button']);
     doTranslation('search_filter_more_filters_button_list');
     doTranslation('search_filter_more_filters_list', ['search_filter_more_filters_button_list']);
+    doTranslation('search_modal_window_header');
+    doTranslation('search_modal_window_body');
+    doTranslation('search_modal_window_footer');
   }
   
   
@@ -705,6 +681,9 @@ $(document).ready(function () {
     	testTranslationMapForDic('search_filter_more_filters_button', ['more_button']);
       testTranslationMap('search_filter_more_filters_button_list');
     	testTranslationMapForDic('search_filter_more_filters_list', ['search_filter_more_filters_button_list']);
+    	testTranslationMap('search_modal_window_header');
+    	testTranslationMap('search_modal_window_body');
+    	testTranslationMap('search_modal_window_footer');
     }
     
     if (window.location.pathname.includes("/hobby/")) {
@@ -714,7 +693,7 @@ $(document).ready(function () {
     } else if (window.location.pathname.includes("/user/home")) {
       testTranslationMap("home_action_type_filter");
       testTranslationMap("home_edit_action_type");
-  		testTranslationMap('home_username_info_type');
+  		testTranslationMapForDic('home_username_info_type', ['home_username_info_type']);
       testTranslationMap('home_image_type_name');
       
       // TODO test for search placeholders

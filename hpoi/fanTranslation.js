@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates text on Hpoi website to easily navigate
-// @version  0.1.3
+// @version  0.1.4
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -347,6 +347,10 @@ const TRANSLATIONS = {
       //collection only
       '途径' : 'Way', // channel? shop? shipment?
       '补款' : 'Due', // how many money yet to paid
+      // line only
+      '名称' : 'Name',
+      '作品' : 'Count',
+      '更新' : 'Upd.',
     },
     'search_modal_window_header' : {
       '选择时间' : 'Select date period',
@@ -359,10 +363,67 @@ const TRANSLATIONS = {
       '确定' : 'OK',
     },
     
+    /* Encyclopedia */
+    'encyclopedia_nav' : {
+      '概述' : 'Overview',
+      '作品' : 'Works',
+      '关联作品' : 'Related works',
+      '参与作品' : 'Works',
+      '用户收藏' : 'User favs',
+      '编辑' : 'Edit',
+      '推送动态' : 'Push action',
+      '加入收藏' : 'Add to favs',
+      '取消收藏' : 'Remove from favs',
+    },
+    'encyclopedia_infobox_props' : {
+      '名称:' : 'Name:',
+      '中文名:' : 'Chinese name:',
+      '别名:' : 'Aliases:',
+      '官网:' : 'Website:',
+      '官方网站:' : 'Official website:',
+      
+      '成立时间:' : 'Founded date:',
+      '所在地:' : 'Location:',
+      
+      '性别:' : 'Sex:',
+      '生日:' : 'Birthday date:',
+      '家庭情况:' : 'Family info:',
+      '前任监护人:' : 'Former guardian:',
+      '监护人:' : 'Guardian:',
+      '血型:' : 'Blood type:',
+      '引用来源:' : 'Info source:',
+      'Anidb ID:' : 'Anidb ID:',
+      '母亲:' : 'Mother:',
+      '学籍:' : 'Student status:',
+      '种族:' : 'Race:',
+      '身高:' : 'Height:',
+      '年龄:' : 'Age:',
+      '体重:' : 'Weight:',
+      '三围:' : 'Body meas.:',
+      '出生地:' : 'Place of birth:',
+      '国籍:' : 'Nationality:',
+      '声优:' : 'Voice actor:',
+      '音源:' : 'Voice provider:',
+      
+      '类型:' : 'Type:',
+      '时间:' : 'Time:',
+      '话数:' : 'Episodes:',
+      '放送星期:' : 'Week day of stream.:',
+    },
+    'encyclopedia_items_section' : {
+      '最新作品' : 'Latest works',
+      '关联手办' : 'Related figures',
+    },
+    'encyclopedia_items_more' : {
+      '查看更多' : 'see more',
+    },
+    
+    
 // types (filter)
   	'x_generic_all' : {
       '全部' : 'all',
-      '不限' : 'all' // actualy - non required
+      '不限' : 'all', // actualy - non required
+      '周边' : 'all',
     },
 		
     '其它' : 'other',
@@ -374,6 +435,7 @@ const TRANSLATIONS = {
       '真实模型' : 'Real model',
       '毛绒布偶' : 'Plushie',
       'Doll娃娃' : 'Doll',
+    '动漫周边' : 'Merch',
     }, 
   'x_item_types_plural' : {
       '手办' : 'Figures',
@@ -426,6 +488,11 @@ const PLACES = {
   'search_modal_window_header' : '#selectDateModal .modal-header > h4.modal-title',
   'search_modal_window_body' : "#selectDateModal .modal-body label",
   'search_modal_window_footer' : "#selectDateModal .modal-footer > button",
+  /* ENCYCLOPEDIA */
+  'encyclopedia_nav' : 'nav.navbar-inner > ul > li > a',
+  'encyclopedia_infobox_props' : 'table.info-box td.info-box-left',
+  'encyclopedia_items_more' : '.subfield a',
+  'encyclopedia_items_section' : '.subfield span',
   
   /* OTHER */
   'item_prop'	: '.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span',
@@ -570,7 +637,7 @@ const testTranslationMapForDic = function (placeToCheck, dictionaries) {
   
 
 $(document).ready(function () {
-	console.log('succes 2');
+	console.log('translating starting...');
   
   doTranslation('nav_top_left_menu', ['x_item_types_plural', 'nav_top_left_menu']);
   doTranslation('nav_top_left_submenu');
@@ -611,8 +678,8 @@ $(document).ready(function () {
     doTranslation('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating_list']);
     doTranslation('search_filter_button_group_out_rating_list');
     doTranslation('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
-    doTranslation('search_filter_button_group_out_type', ['x_item_types', 'search_filter_button_group_out_type_list']);
-    doTranslation('search_filter_button_group_out_type_list');
+    doTranslation('search_filter_button_group_out_type', ['x_item_types', 'search_filter_button_group_out_type_list', 'x_generic_all']);
+    doTranslation('search_filter_button_group_out_type_list', ['x_item_types', 'search_filter_button_group_out_type_list']);
     doTranslation('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
     doTranslation('search_filter_button_display_icon_list');
     doTranslation('search_filter_more_filters_button', ['more_button']);
@@ -622,6 +689,11 @@ $(document).ready(function () {
     doTranslation('search_modal_window_body');
     doTranslation('search_modal_window_footer');
   }
+  
+  doTranslation('encyclopedia_nav');
+  doTranslation('encyclopedia_infobox_props');
+  doTranslation('encyclopedia_items_section');
+  doTranslation('encyclopedia_items_more');
   
   
   let datesCnReleaseDate = $('.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span:contains("date")').siblings('p').children('a');
@@ -674,8 +746,8 @@ $(document).ready(function () {
       testTranslationMapForDic('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating_list']);
       testTranslationMap('search_filter_button_group_out_rating_list');
       testTranslationMapForDic('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
-      testTranslationMapForDic('search_filter_button_group_out_type',  ['x_item_types', 'search_filter_button_group_out_type_list']);
-      testTranslationMap('search_filter_button_group_out_type_list');
+      testTranslationMapForDic('search_filter_button_group_out_type',  ['x_item_types', 'search_filter_button_group_out_type_list', 'x_generic_all']);
+      testTranslationMapForDic('search_filter_button_group_out_type_list', ['x_item_types', 'search_filter_button_group_out_type_list']);
       testTranslationMapForDic('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
       testTranslationMap('search_filter_button_display_icon_list');
     	testTranslationMapForDic('search_filter_more_filters_button', ['more_button']);
@@ -685,6 +757,10 @@ $(document).ready(function () {
     	testTranslationMap('search_modal_window_body');
     	testTranslationMap('search_modal_window_footer');
     }
+    testTranslationMap('encyclopedia_nav');
+    testTranslationMap('encyclopedia_infobox_props');
+ 		testTranslationMap('encyclopedia_items_section');
+    testTranslationMap('encyclopedia_items_more');
     
     if (window.location.pathname.includes("/hobby/")) {
       testTranslationMap("item_prop");

@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates text on Hpoi website to easily navigate
-// @version  0.1.4
+// @version  0.1.5
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -15,12 +15,6 @@
 
 /* 
 Expect library by mjackson https://github.com/mjackson/expect
-
-TODO:
-* complex queries
-** item rating refreshing after time (observe - rating_label doesnt work),
-** get a translation from company names ?? (from entry pages - like 世嘉  => SEGA)
-
 */
 
 /* worthy examples:
@@ -154,7 +148,7 @@ const TRANSLATIONS = {
       '发售：' : 'Release:',
       '比例：' : 'Scale:',
       '制作：' : 'Maker:',
-      '发行：' : 'Publisher:',
+      '发行：' : 'Distributor:',
       '系列：' : 'Line:',
       '原型：' : 'Sculptor:',
 			'涂装：' : 'Coloring:',
@@ -409,11 +403,29 @@ const TRANSLATIONS = {
       '时间:' : 'Time:',
       '话数:' : 'Episodes:',
       '放送星期:' : 'Week day of stream.:',
+      '发行日期:' : 'Released:',
+      '开发:' : 'Developed:',
     },
     'encyclopedia_items_section' : {
-      '最新作品' : 'Latest works',
+      '最新作品' : 'Latest items',
       '关联手办' : 'Related figures',
+      '系列' : 'Lines',
+      '制作周边' : 'Items manufactured',
+      '发行周边' : 'Items distributed',
+      '她参与的手办' : 'Figures worked on',
+      '他参与的手办' : 'Figures worked on',
     },
+    /*
+    
+  系列 共13个 => Lines, total of 13
+  系列 共4个 => Lines, total of 4
+  制作周边 共596个, 评分4.44 => Made works, total of 596, rating 4.44
+  制作周边 共220个, 评分4.33 => Made works, total of 220, rating 4.33
+  发行周边 共297个 => Distributed works, total of 220
+  发行周边 共1个 => Distributed works, total of 1
+  她参与的手办 共110个, 评分4.43 => Figures worked on, total of 110, rating 4.43
+  他参与的手办 共288个, 评分4.38 => Figures worked on, total of 288, rating 4.38
+    */
     'encyclopedia_items_more' : {
       '查看更多' : 'see more',
     },
@@ -600,6 +612,63 @@ const translateRelativeDate = function(datesTextesReleaseDate) {
 		});
 };
 
+  /* do stuff to translate text like
+  系列 共13个 => Lines, total of 13
+  系列 共4个 => Lines, total of 4
+  制作周边 共596个, 评分4.44 => Made works, total of 596, rating 4.44
+  制作周边 共220个, 评分4.33 => Made works, total of 220, rating 4.33
+  发行周边 共297个 => Distributed works, total of 220
+  发行周边 共1个 => Distributed works, total of 1
+  她参与的手办 共110个, 评分4.43 => Figures worked on, total of 110, rating 4.43
+  他参与的手办 共288个, 评分4.38 => Figures worked on, total of 288, rating 4.38
+  
+  so
+  * 1st part - get before Chinese space, translate it as dic sugessts
+  * 2nd part - optional if space exists, get between Chinese space and coma (or end of string, if it comes), get a number and add the text
+  * 3rd part - optional, after the coma, get a number and add the text
+  */
+  let translateEncyclopediaItemsHeader = function(element, dic) {
+    let textToTranslate = element.textContent.trim();
+    let translation = "";
+    let secondPartExists = textToTranslate.indexOf(" ") != -1;
+    let title = "";
+   // * 1st part - get before Chinese space, translate it as dic sugessts
+    if (secondPartExists) {
+    	title = textToTranslate.substring(0, textToTranslate.indexOf(" "));
+    } else {
+      title = textToTranslate;
+    }
+    
+    let titleTranslation = TRANSLATIONS.en[dic][title];
+    
+    if (!titleTranslation)
+      return;
+    
+    translation += TRANSLATIONS.en[dic][title];
+    
+    if (secondPartExists) {
+    
+      //* 2nd part - optional if space exists, get between Chinese space and coma (or end of string, if it comes), get a number and add the text
+     //* 3rd part - optional, after the coma, get a number and add the text
+      let thirdPartExists = textToTranslate.indexOf(",") != -1;
+      let total = null;
+      let rating = null;
+      if (thirdPartExists) {
+        total = textToTranslate.substring(textToTranslate.indexOf(" ") + 2, textToTranslate.indexOf(",") - 1);
+        rating = textToTranslate.substring(textToTranslate.indexOf(",") + 4);
+      } else {
+        total = textToTranslate.substring(textToTranslate.indexOf(" ") + 2, textToTranslate.length - 1);
+      }
+      
+      translation += ", total of " + total;
+      if (thirdPartExists) {
+        translation += ", average rating " + rating;
+      }
+    }
+    element.textContent = translation;
+    
+  };
+
 /* ==== TESTS ===== */
 
 const testTranslationMap = function (submapToCheck) {
@@ -634,7 +703,7 @@ const testTranslationMapForDic = function (placeToCheck, dictionaries) {
   });
   
 };
-  
+
 
 $(document).ready(function () {
 	console.log('translating starting...');
@@ -692,7 +761,12 @@ $(document).ready(function () {
   
   doTranslation('encyclopedia_nav');
   doTranslation('encyclopedia_infobox_props');
-  doTranslation('encyclopedia_items_section');
+  
+  $(PLACES['encyclopedia_items_section']).each(function(index, element) {
+    translateEncyclopediaItemsHeader(element, 'encyclopedia_items_section');
+  });
+  
+ // doTranslation('encyclopedia_items_section');
   doTranslation('encyclopedia_items_more');
   
   
@@ -759,7 +833,7 @@ $(document).ready(function () {
     }
     testTranslationMap('encyclopedia_nav');
     testTranslationMap('encyclopedia_infobox_props');
- 		testTranslationMap('encyclopedia_items_section');
+ 		testTranslationMapForDic('encyclopedia_items_section', ['encyclopedia_items_section']);
     testTranslationMap('encyclopedia_items_more');
     
     if (window.location.pathname.includes("/hobby/")) {

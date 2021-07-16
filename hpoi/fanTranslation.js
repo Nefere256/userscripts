@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates text on Hpoi website to easily navigate
-// @version  0.1.6
+// @version  0.2
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -104,7 +104,7 @@ const TRANSLATIONS = {
     'home_action_type_sub_filter' : {
       '全部' : 'All',
       /*info only*/
-      '制作' : 'Announcements',
+      '制作' : 'New items',
       '更图' : 'New pics',
       '开订' : 'Preorders',
       '延期' : 'Delays',
@@ -120,9 +120,11 @@ const TRANSLATIONS = {
        '制作决定' : 'New item announced',
        '官图更新' : 'Official pictures update',
        '预订时间' : 'Preorders opened',
+       '预定时间' : 'Preorders opened', 
        '出荷延期' : 'Release postponed',
        '出荷时间' : 'Release time',
        '再版确定' : 'Re-release confirmed',
+      '情报更新' : 'Info updated',
     },
     'home_edit_action_type' : {
       '传图' : 'Uploaded pics',
@@ -140,7 +142,25 @@ const TRANSLATIONS = {
       '相册' : 'Album',
       '作品' : 'Series',
     },
-    /* TEM PAGE */
+    /* ITEM HOME PAGE */
+    'home_item_database_tabs' : {
+      '最新入库' : 'Recently added',
+      '热门预定' : 'Most ordered',
+      '热门出荷' : 'Close release',
+    },
+    'home_item_popular_tabs' : {
+      '每日热门' : 'Best today',
+      '每周热门' : 'Best this week',
+      '好评top' : 'Best',
+    },
+    'home_item_popular_hits' : {
+      '浏览' : 'Hits',
+    },
+    'home_item_amazon_buy' : {
+      '捡!' : 'Buy!',
+    },
+    
+    /* ITEM PAGE */
     'item_prop' : {
       '名称：' : 'Name:',
       '别名：' : 'Alias:',
@@ -585,6 +605,17 @@ const PLACES = {
   'home_edit_action_type'	: '.home-info .home-info-content span.type-action',
   'home_username_info_type'	: 'div.home-info > .row > .home-info-content div:not(.has-user) > .user-name',
   'home_image_type_name'	: '.home-info .type-name',
+  /* HOME ITEM PAGE */
+  'home_item_props' : 'div.hpoi-database-content > div > div.hpoi-dataBase-item > div > div.hpoi-database-text > div > span:nth-of-type(1)',
+  'home_item_database_tabs' : '#database-newAdd, #database-hotOrder, #database-release',
+  'home_item_popular_tabs' : 'div.hpoi-databas-popular > div > div > div.database-select > a',
+  'home_item_popular_hits' : 'div.hpoi-populartext-box',
+  'home_item_amazon_buy' : 'div.hpoi-nichiapick > div.hpoi-nichiapick-box > div > div.hpoi-nichiapick-item > div.hpoi-nichiapick-content > div.hpoi-nichiapick-text > a.hpoi-nichia-pick',
+  'home_item_info_sub_filter' : 'div.hpoi-latestinformation-left > div.hpoi-box-title > div.hpoi-title-left > a',
+  'home_item_info_action_type' : 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(2) > span',
+  'home_item_info_type_long' : 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(1) > span:nth-of-type(1)',
+  'home_item_info_time' : 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(1) > span:nth-of-type(2)',
+  'home_item_info_type_name' : 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.left-leioan > span',
   /* SEARCH PAGE*/
   'search_page_ibox'	: '.ibox > .ibox-title > h5',
   'search_item_props'	: 'ul.bs-glyphicons-list > li.detail-grid .detail-grid-info em',
@@ -618,7 +649,7 @@ const PLACES = {
   'search_global_users_stats' : '#result-content .user-i-box .row > div',
   'search_global_results_none' : 'div#result-content > div:not(.pull-right)',
   'search_global_page_ibox'	: '.ibox > .ibox-title > h5',
-  'search_global_ibox_description' : '.ibox:first > .ibox-content  *',
+  'search_global_ibox_description' : '.ibox:first > .ibox-content *',
   /* ENCYCLOPEDIA */
   'encyclopedia_nav' : 'nav.navbar-inner > ul > li > a',
   'encyclopedia_infobox_props' : 'table.info-box td.info-box-left',
@@ -642,8 +673,10 @@ const PLACES = {
 /* 
 * itemInQuestion - name of the jsquery selector/dictionary
 * subDictionaries - list of disctionaries, used in dic_first method only
-* methodType - 'item_first' - replace the exact string appearing in itemInQuestion results
+* methodType 
+		- 'item_first' - replace the exact string appearing in itemInQuestion results
 		- 'dic_first' - check all keys listed in subDictionaries and replace them with translations stored in values
+* elementsInQuestion - optional if you'd like to use
 */
 const doTranslation = function(itemInQuestion, subDictionaries = [], methodType = 'item_first', elementsInQuestion) {
   if (subDictionaries.length) {
@@ -830,6 +863,7 @@ const testTranslationMapForDic = function (placeToCheck, dictionaries) {
 
 $(document).ready(function () {
 	console.log('translating starting...');
+  const PATHNAME = window.location.pathname;
   
   doTranslation('nav_top_left_menu', ['x_item_types_plural', 'nav_top_left_menu']);
   doTranslation('nav_top_left_submenu');
@@ -840,25 +874,61 @@ $(document).ready(function () {
   doTranslation("nav_top_personal");
   doTranslation('nav_top_search_drop_list', ['nav_top_search_drop_list', 'x_item_types']);
   doTranslation('nav_top_search_drop_list_default');
+  //3 pages in one
   doTranslation('hpoi_box_title');
   
-  doTranslation('profile_stats');
-  doTranslation('profile_desc');
-  doTranslation('home_action_type_filter');
-  doTranslation('home_action_type_sub_filter');
-  doTranslation('home_edit_action_type');
-  $(PLACES['home_edit_action_type']).prev().css('width', '60%');
-  doTranslation('home_username_info_type');
-  doTranslation('home_image_type_name');
-	doTranslation('item_prop');
-  doTranslation('item_nav');
-  if(window.location.pathname.includes("/hobby/")) {
-     doTranslation('item_contribution_type', ['item_contribution_type']);
+  if (PATHNAME.includes('/user/home')) {
+    doTranslation('profile_stats');
+    doTranslation('profile_desc');
+    doTranslation('home_action_type_filter');
+    doTranslation('home_action_type_sub_filter');
+    doTranslation('home_edit_action_type');
+    $(PLACES['home_edit_action_type']).prev().css('width', '60%');
+    doTranslation('home_username_info_type');
+    doTranslation('home_image_type_name');
+    
+    let relativeTimes = $('span.type-time');
+  	translateRelativeDate(relativeTimes);
+  }
+  if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
+    PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
+     PATHNAME.endsWith('/hobby/doll')) {
+    doTranslation(null, ['search_item_props'], 'dic_first', $(PLACES['home_item_props']));
+    doTranslation('home_item_database_tabs');
+    doTranslation('home_item_popular_tabs');
+    doTranslation('home_item_popular_hits', ['home_item_popular_hits']);
+    doTranslation('home_item_amazon_buy');
+    doTranslation('home_item_info_sub_filter', ['home_action_type_sub_filter']);
+    doTranslation('home_item_info_action_type', ['home_edit_action_type']);
+    doTranslation('home_item_info_type_long', ['home_username_info_type']);
+    //doTranslation('home_item_info_type_name', ['home_image_type_name']); TODO item subtypes per page
+    let relativeTimes = $(PLACES['home_item_info_time']);
+  	translateRelativeDate(relativeTimes);
+    
+    
+    if (PATHNAME.endsWith('/hobby/')) {
+      doTranslation('home_item_info_type_name', ['x_subtypes_figures']);
+    } else if (PATHNAME.endsWith('/hobby/model')) {
+      doTranslation('home_item_info_type_name', ['x_subtypes_anime_models']);
+    } else if (PATHNAME.endsWith('/hobby/real')) {
+      doTranslation('home_item_info_type_name', ['x_subtypes_real_models']);
+    } else if (PATHNAME.endsWith('/hobby/moppet')) {
+      doTranslation('home_item_info_type_name', ['x_subtypes_plushies']);
+    } else if (PATHNAME.endsWith('/hobby/doll')) {
+      doTranslation('home_item_info_type_name', ['x_subtypes_dolls']);
+    }
+    
+  }
+  if(PATHNAME.includes("/hobby/")) {
+    doTranslation('item_prop');
+    doTranslation('item_nav');
+    doTranslation('item_contribution_type', ['item_contribution_type']);
+    
   }
   doTranslation('rating_label');
 	doTranslation('more_button');
 	doTranslation('search_item_props');
-  if (window.location.pathname.includes('/hobby/all')) { // item search page
+  if (PATHNAME.includes('/hobby/all')) { // item search page
 		doTranslation('search_page_ibox');
     doTranslation('search_filter_button_group');
     doTranslation('search_filter_button_group_sort');
@@ -882,7 +952,7 @@ $(document).ready(function () {
     doTranslation('search_modal_window_footer');
     
   }
-  if (window.location.pathname.includes('/search')) {
+  if (PATHNAME.includes('/search')) {
     doTranslation('search_global_advanced_search_button');
     doTranslation('search_global_main_nav');
     
@@ -949,9 +1019,6 @@ $(document).ready(function () {
   });
   translateFixedDate(datesTextesReleaseDate);
   
-  let relativeTimes = $('span.type-time');
-  translateRelativeDate(relativeTimes);
-  
   //translate home search placeholder
   var searchboxes = $(PLACES['home-page-searchbox']);
   for(const searchbox of searchboxes) {
@@ -981,7 +1048,20 @@ $(document).ready(function () {
     //testTranslationMap('nav_top_search_drop_list_default');
     testTranslationMap('hpoi_box_title');
 		testTranslationMap('search_item_props');
-    if (window.location.pathname.includes('/hobby/all')) {
+    if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
+    PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
+     PATHNAME.endsWith('/hobby/doll')) {
+      testTranslationMap('home_item_database_tabs');
+      testTranslationMap('home_item_popular_tabs');
+      testTranslationMapForDic('home_item_popular_hits', ['home_item_popular_hits']);
+      testTranslationMap('home_item_amazon_buy');
+      testTranslationMapForDic('home_item_info_sub_filter', ['home_action_type_sub_filter']);
+      testTranslationMapForDic('home_item_info_action_type', ['home_edit_action_type']);
+      testTranslationMapForDic('home_item_info_type_long', ['home_username_info_type']);
+    	//testTranslationMapForDic('home_item_info_type_name', ['home_image_type_name']);
+    }
+    
+    if (PATHNAME.includes('/hobby/all')) {
       testTranslationMap('search_page_ibox');
       testTranslationMap('search_filter_button_group');
       testTranslationMap('search_filter_button_group_sort');
@@ -1006,7 +1086,7 @@ $(document).ready(function () {
       
       
     }
-    if (window.location.pathname.includes('/search')) {
+    if (PATHNAME.includes('/search')) {
       testTranslationMap('search_global_advanced_search_button');
       testTranslationMap('search_global_main_nav');
       testTranslationMapForDic('search_global_result_tags', ['search_global_tags_additional','nav_top_search_drop_list',
@@ -1022,11 +1102,11 @@ $(document).ready(function () {
  		testTranslationMapForDic('encyclopedia_items_section', ['encyclopedia_items_section']);
     testTranslationMap('encyclopedia_items_more');
     
-    if (window.location.pathname.includes("/hobby/")) {
+    if (PATHNAME.includes("/hobby/")) {
       testTranslationMap("item_prop");
       testTranslationMap('item_nav');
       testTranslationMapForDic('item_contribution_type', ['item_contribution_type']);
-    } else if (window.location.pathname.includes("/user/home")) {
+    } else if (PATHNAME.includes("/user/home")) {
       testTranslationMap("home_action_type_filter");
       testTranslationMap("home_edit_action_type");
   		testTranslationMapForDic('home_username_info_type', ['home_username_info_type']);

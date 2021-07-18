@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates text on Hpoi website to easily navigate
-// @version  0.2
+// @version  0.2.1
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -296,39 +296,6 @@ const TRANSLATIONS = {
     'search_filter_button_group_out_type' : {
       '类型' : 'Type: ',
     },
-    'search_filter_button_group_out_type_list' : {
-      '全部' : 'All',
-      '其它' : 'Other',
-
-      '比例人形' : 'Scale figure',
-      'Q版人形' : 'Chibi figure',
-      '盒蛋/扭蛋' : 'Blind box/gacha',
-      '怪兽/机械' : 'Monster/mecha',
-      '仿真人物' : 'Real person',
-      '配件' : 'Accessory',
-      '场景' : 'Diorama',
-
-      '机甲-拼装' : 'Mecha - to assembly',
-      '机甲-完成品' : 'Mecha - completed',
-      '机甲-配件' : 'Mecha - accessory',
-      '特摄英雄' : 'Tokusatsu hero',
-      '特摄怪兽' : 'Tokusatsu monster',
-      '特摄配件' : 'Tokusatsu accessory',
-      '扭蛋/玩具' : 'Gacha/toy',
-      '驱动模型(四驱车)' : 'Vechicle (4 wheels)',
-      '驱动模型配件' : 'Vechicle accessory',
-
-      '拼装' : 'To assembly',
-      '完成品' : 'Completed',
-      '人形' : 'Person',
-      '场景配件' : 'Diorama accessory',
-      '工具材料' : 'Tool',
-
-      '拟人形' : 'Anthropomorphic',
-      '动植物' : 'Flora and fauna',
-      
-      'Doll完成品' : 'Complete doll'
-    },
     'search_filter_button_group_out_view' : {
       '视图' : 'View'
     },
@@ -522,6 +489,7 @@ const TRANSLATIONS = {
       '毛绒布偶' : 'Plushie',
       'Doll娃娃' : 'Doll',
       '动漫周边' : 'Merch',
+      '其它' : 'Other',
     }, 
     'x_item_types_plural' : {
       '手办' : 'Figures',
@@ -538,6 +506,7 @@ const TRANSLATIONS = {
       '仿真人物' : 'Real person',
       '配件' : 'Accessory',
       '场景' : 'Diorama',
+    	'其它' : 'Other',
     },
     'x_subtypes_anime_models' : {
       '机甲-拼装' : 'Mecha - to assembly',
@@ -549,6 +518,7 @@ const TRANSLATIONS = {
       '扭蛋/玩具' : 'Gacha/toy',
       '驱动模型(四驱车)' : 'Vechicle (4 wheels)',
       '驱动模型配件' : 'Vechicle accessory',
+      '其它' : 'Other',
     },
     'x_subtypes_real_models' : {
       '拼装' : 'To assembly',
@@ -558,8 +528,8 @@ const TRANSLATIONS = {
       '工具材料' : 'Tool',
     },
     'x_subtypes_plushies' : {
-      '人形' : 'Human',
       '拟人形' : 'Anthropomorphic',
+      '人形' : 'Human',
       '动植物' : 'Flora and fauna',
     },
     'x_subtypes_dolls' : {
@@ -940,8 +910,6 @@ $(document).ready(function () {
     doTranslation('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating_list']);
     doTranslation('search_filter_button_group_out_rating_list');
     doTranslation('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
-    doTranslation('search_filter_button_group_out_type', ['x_item_types', 'search_filter_button_group_out_type_list', 'x_generic_all']);
-    doTranslation('search_filter_button_group_out_type_list', ['x_item_types', 'search_filter_button_group_out_type_list']);
     doTranslation('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
     doTranslation('search_filter_button_display_icon_list');
     doTranslation('search_filter_more_filters_button', ['more_button']);
@@ -950,6 +918,33 @@ $(document).ready(function () {
     doTranslation('search_modal_window_header');
     doTranslation('search_modal_window_body');
     doTranslation('search_modal_window_footer');
+
+    const typeToTypeDic = function (categoryId) {
+      if (categoryId <= 100)
+        return 'x_subtypes_figures';
+      if (categoryId <= 200)
+        return 'x_subtypes_anime_models';
+      if (categoryId <= 300)
+        return 'x_subtypes_dolls';
+      if (categoryId <= 400)
+        return 'x_subtypes_plushies';
+      if (categoryId <= 500)
+        return 'x_subtypes_real_models';
+      if (categoryId <= 900)
+        return 'x_subtypes_merch';
+    };
+    
+    let category = new URL(window.location).searchParams.get("category");
+    if (category == null || category == 0) {
+      doTranslation('search_filter_button_group_out_type', ['x_item_types', 'x_generic_all']);
+      doTranslation('search_filter_button_group_out_type_list', ['x_item_types', 'x_generic_all']);
+    } else if (category % 100 == 0) { // main type
+      doTranslation('search_filter_button_group_out_type', ['x_item_types']);
+      doTranslation('search_filter_button_group_out_type_list', [typeToTypeDic(category), 'x_generic_all']);
+    } else if (category % 100 != 0) { // sub type
+      doTranslation('search_filter_button_group_out_type', [typeToTypeDic(category)]);
+      doTranslation('search_filter_button_group_out_type_list', [typeToTypeDic(category), 'x_generic_all']);
+    }
     
   }
   if (PATHNAME.includes('/search')) {
@@ -1073,8 +1068,6 @@ $(document).ready(function () {
       testTranslationMapForDic('search_filter_button_group_out_rating', ['search_filter_button_group_out_rating_list']);
       testTranslationMap('search_filter_button_group_out_rating_list');
       testTranslationMapForDic('search_filter_button_group_out_type', ['search_filter_button_group_out_type']);
-      testTranslationMapForDic('search_filter_button_group_out_type',  ['x_item_types', 'search_filter_button_group_out_type_list', 'x_generic_all']);
-      testTranslationMapForDic('search_filter_button_group_out_type_list', ['x_item_types', 'search_filter_button_group_out_type_list']);
       testTranslationMapForDic('search_filter_button_group_out_view', ['search_filter_button_group_out_view']);
       testTranslationMap('search_filter_button_display_icon_list');
     	testTranslationMapForDic('search_filter_more_filters_button', ['more_button']);

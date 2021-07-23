@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates text on Hpoi website to easily navigate
-// @version  0.2.1
+// @version  0.3
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -51,6 +51,7 @@ const TRANSLATIONS = {
       '360°照片' : '360° pics',
       '厂商' : 'Makers',
       '商城' : 'Mall',
+      '登录' : 'Login',
     },
     'nav_top_right_get_app' : {
       '下载客户端' : 'Apps',
@@ -140,7 +141,10 @@ const TRANSLATIONS = {
       '毛绒布偶' : 'Plushie',
       'Doll娃娃' : 'Doll',
       '相册' : 'Album',
-      '作品' : 'Series',
+      '厂商' : 'Manufacturer',
+  		'系列' : 'Line',
+			'作品' : 'Series',
+      '角色' : 'Character',
     },
     /* ITEM HOME PAGE */
     'home_item_database_tabs' : {
@@ -445,6 +449,9 @@ const TRANSLATIONS = {
       '国籍:' : 'Nationality:',
       '声优:' : 'Voice actor:',
       '音源:' : 'Voice provider:',
+      '稀有度:' : 'Rarity:',
+			'编号:' : 'Number:',
+			'阵营:' : 'Faction:',
       
       '类型:' : 'Type:',
       '时间:' : 'Time:',
@@ -471,6 +478,107 @@ const TRANSLATIONS = {
       '查看更多' : 'see more',
     },
     
+    /*  SETTINGS */ 
+    'settings_list' : {
+      '基本资料' : 'General info',
+      '屏蔽设置' : 'Block settings',
+      '隐私设置' :  'Privacy settings',
+      '修改密码' : 'Change password',
+      '更换邮箱' : 'Change e-mail',
+      '更换手机号' : 'Change phone number',
+      '账号关联' : 'Account linking',
+      '头像' : 'Avatar',
+      '用户设置' : 'User settings',
+    },
+    'settings_panel_button' : {
+      '保存' : 'Save',
+      '更换' : 'Change',
+      '获取' : 'Obtain',
+    },
+    'settings_general_form' : {
+      '昵称:' : 'Nickname:',
+      '签名:' : 'Signature:',
+      '性别:' : 'Gender:',
+      '生日:' : 'Birthday:',
+      '自我介绍:' : 'About:',
+    },
+    'settings_general_form_gender' : {
+      '男' : 'Male',
+      '女' : 'Female',
+      '保密' : 'Secret',
+    },
+    'settings_block_form' : {
+      'NSFW内容:' : 'NSFW content:', 
+      '屏蔽动态显示:' : 'Dynamic list content:',
+      '邮件通知:' : 'Email notifications:',
+      '短信通知:' : 'SMS notifications:',
+      '条目评论区:' : 'Entry page comment section',
+    },
+    'settings_block_form_radio' : {
+      '提示我' : 'Prompt me',
+      '不显示' : 'Don\'t show',
+      '显示' : 'Show',
+      '情报': 'Info',
+      '评论' : 'Comment',
+      '图片上传' : 'New pics',
+      '出售' : 'Sale', 
+      '求购' : 'Hunt',
+      '商品开订' : 'Preorders opened',
+      '商品截单' : 'Preorders ended',
+      '商品出荷' : 'Items released',
+      '直接显示' : 'Show directly',
+      '手动展开' : 'Show when requested',
+    },
+    'settings_privacy_headers' : {
+    '周边条目' : 'Collection',
+    '收藏内容' : 'Favorites',
+    '收藏统计' : 'Collection stats',
+    '其他内容' : 'Other',
+    },
+    'settings_privacy_form' : {
+      "手办、动漫模型、真实模型、毛绒布偶、Doll娃娃" : 'figures, dolls, plushies etc',
+      '相册、图片、文章' : 'albums, pics, articles',
+      '历史消费、入手数量、待补款等' : 'activity, items quantity, ordered etc.',
+      '系列、厂商、角色、人物、作品' : 'lines, companies, characters, people, series',
+    },
+    'settings_privacy_form_radio' : {
+      '所有人可见' : 'For all',
+      '互相关注可见' : 'For friends',
+      '仅自己可见' : 'For me',
+    },
+    'settings_password_form' : {
+      '旧密码:' : 'Old password:',
+      '新密码:' : 'New password:',
+      '确认密码:' : 'Confirm new password:',
+    },
+    'settings_email_link_avatar_form' : {
+      '邮箱' : 'Email',
+      '旺旺ID:' : 'WangWang ID:',
+      '原图' : 'Original image',
+      '缩略图' : 'Thumbnail',
+      '使用新图' : 'Use new image',
+    },
+    'settings_phone_form' : {
+      '原手机号:' : 'Old phone number:',
+      '密码:' : 'Password:',
+      '新手机号:' : 'New phone number',
+      '获取验证码:' : 'Verification code:',
+    },
+    'settings_phone_form_placeholder' : {
+      '图片验证' : 'A picture text',
+      '填写短信验证码' : 'Fill in a code from SMS',
+    },
+    'settings_avatar_form_placeholder' : {
+      '在线上传请在此输入地址' : 'Paste image URL',
+			'如需本地上传，请选择文件' : 'Select image file',
+    },
+    'settings_avatar_form_button_upload' : {
+      '在线上传' : 'Upload',
+			'本地上传' : 'Upload',
+    },
+    'settings_avatar_form_button_cancel' : {
+    	'还是算了' : 'Cancel',
+ 		},
     
 // types (filter)
     'x_generic_all' : {
@@ -560,7 +668,7 @@ const PLACES = {
   'nav_top_left_menu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > a',
   'nav_top_left_submenu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
   'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a',
-  'nav_top_right_get_app'	: 'html body nav.nav-conters div.hpoi-nav-tabbox ul.nav-conters-right li div.icon_Mobile_phone span',
+  'nav_top_right_get_app'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > div.icon-Mobile-phone span',
   'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
   'nav_top_personal'	: '.hpoi-navpersonals > .hpoi-navpersonal > li > a',
   'nav_top_search_drop_list'	: '.nav-conters-right .dropdown-menu > li > a',
@@ -625,8 +733,24 @@ const PLACES = {
   'encyclopedia_infobox_props' : 'table.info-box td.info-box-left',
   'encyclopedia_items_more' : '.subfield a',
   'encyclopedia_items_section' : '.subfield span',
-  
-  
+  /* SETTINGS */ 
+  'settings_list' : '.list-group > .list-group-item',
+  'settings_panel_title' : '.panel > .panel-heading',
+  'settings_panel_button' : '.form-group > div > button',
+  'settings_general_form' : '#editData > .form-group > label',
+  'settings_general_form_gender' : '#editData > .form-group > div > label.radio-inline',
+  'settings_block_form' : '#updSetting > .form-group > label',
+  'settings_block_form_radio' : '#updSetting > .form-group > div > label.radio-inline',
+  'settings_privacy_headers' : '#updSetting > .form-group > div.row > h4',
+  'settings_privacy_form' : '#updSetting > .form-group > div.row > span',
+  'settings_privacy_form_radio' : '#updSetting > .form-group > div > div.privacySetting-option  > label.radio-inline',
+  'settings_password_form' : 'form#updPwd > div.form-group > label',
+  'settings_email_link_avatar_form' : 'form.form-horizontal > div.panel > div.panel-body > div.form-group > label',
+  'settings_phone_form' : 'form#updPhone > div.form-group > label',
+  'settings_phone_form_placeholder' : 'form#updPhone > div.form-group > div > input[placeholder]',
+  'settings_avatar_form_placeholder' : '.form-group > div > div.input-group > input[placeholder]',
+  'settings_avatar_form_button_upload' : '.form-group > div > div.input-group > span.input-group-btn > button',
+  'settings_avatar_form_button_cancel' : '.form-group > div.bs-example > a.btn',
   /* OTHER */
   'item_prop'	: '.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span',
   'item_contribution_type'	: 'div.hpoi-user-content > div',
@@ -847,7 +971,7 @@ $(document).ready(function () {
   //3 pages in one
   doTranslation('hpoi_box_title');
   
-  if (PATHNAME.includes('/user/home')) {
+  if (PATHNAME.includes('/user/home') || PATHNAME == '/') {
     doTranslation('profile_stats');
     doTranslation('profile_desc');
     doTranslation('home_action_type_filter');
@@ -871,7 +995,6 @@ $(document).ready(function () {
     doTranslation('home_item_info_sub_filter', ['home_action_type_sub_filter']);
     doTranslation('home_item_info_action_type', ['home_edit_action_type']);
     doTranslation('home_item_info_type_long', ['home_username_info_type']);
-    //doTranslation('home_item_info_type_name', ['home_image_type_name']); TODO item subtypes per page
     let relativeTimes = $(PLACES['home_item_info_time']);
   	translateRelativeDate(relativeTimes);
     
@@ -1007,6 +1130,35 @@ $(document).ready(function () {
   
   doTranslation('encyclopedia_items_more');
   
+  if (PATHNAME.includes('/user/edit/')) {
+      doTranslation('settings_list');
+      doTranslation('settings_panel_title', ['settings_list']);
+    	doTranslation('settings_panel_button');
+   		doTranslation('settings_general_form');
+    	doTranslation('settings_general_form_gender');
+    	doTranslation('settings_block_form');
+    	doTranslation('settings_block_form_radio');
+      doTranslation('settings_privacy_headers');
+      doTranslation('settings_privacy_form', ['settings_privacy_form']);
+      doTranslation('settings_privacy_form_radio');
+    	doTranslation('settings_password_form');
+    	doTranslation('settings_email_link_avatar_form');
+    	doTranslation('settings_phone_form');
+    	doTranslation('settings_avatar_form_button_upload');
+   		doTranslation('settings_avatar_form_button_cancel');
+    
+      var verifyboxes = $(PLACES['settings_phone_form_placeholder']);
+      for(const verifybox of verifyboxes) {
+        verifybox.attributes['placeholder'].textContent = 
+          TRANSLATIONS.en['settings_phone_form_placeholder'][verifybox.attributes['placeholder'].textContent];
+      }
+    	var uploadBoxes = $(PLACES['settings_avatar_form_placeholder']);
+      for(const uploadBox of uploadBoxes) {
+        uploadBox.attributes['placeholder'].textContent = 
+          TRANSLATIONS.en['settings_avatar_form_placeholder'][uploadBox.attributes['placeholder'].textContent];
+      }
+  }
+  
   
   let datesCnReleaseDate = $('.hpoi-ibox-content > .infoList-box > .hpoi-infoList-item > span:contains("date")').siblings('p').children('a');
   let datesTextesReleaseDate = datesCnReleaseDate.contents().filter(function() {
@@ -1104,8 +1256,25 @@ $(document).ready(function () {
       testTranslationMap("home_edit_action_type");
   		testTranslationMapForDic('home_username_info_type', ['home_username_info_type']);
       testTranslationMap('home_image_type_name');
+      testTranslationMap('settings_general_form');
       
       // TODO test for search placeholders
+    } else if (PATHNAME.includes('/user/edit/')) {
+      testTranslationMap('settings_list');
+      testTranslationMapForDic('settings_panel_title', ['settings_list']);
+    	testTranslationMap('settings_panel_button');
+   		testTranslationMap('settings_general_form');
+      testTranslationMap('settings_general_form_gender');
+      testTranslationMap('settings_block_form');
+    	testTranslationMap('settings_block_form_radio');
+      testTranslationMap('settings_privacy_headers');
+      testTranslationMapForDic('settings_privacy_form', ['settings_privacy_form']);
+      testTranslationMap('settings_privacy_form_radio');
+      testTranslationMap('settings_password_form');
+      testTranslationMap('settings_email_link_avatar_form');
+    	testTranslationMap('settings_phone_form');
+    	testTranslationMap('settings_avatar_form_button_upload');
+   		testTranslationMap('settings_avatar_form_button_cancel');
     }
   
   } catch (e) {

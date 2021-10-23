@@ -1120,9 +1120,9 @@ $(document).ready(function () {
     let relativeTimes = $('span.type-time');
   	translateRelativeDate(relativeTimes);
   }
-  if (PATHNAME === '/' || PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
-    PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
-     PATHNAME.endsWith('/hobby/doll')) { 
+  if (PATHNAME === '/'  || PATHNAME.endsWith('/index/home') || PATHNAME.endsWith('/hobby/') 
+	|| PATHNAME.endsWith('/hobby/model') || PATHNAME.endsWith('/hobby/real')
+	|| PATHNAME.endsWith('/hobby/moppet') || PATHNAME.endsWith('/hobby/doll')) { 
     doTranslation(null, ['search_item_props'], 'dic_first', $(PLACES['home_item_props']));
     doTranslation('home_item_database_tabs');
     doTranslation('home_item_popular_tabs');
@@ -1145,7 +1145,7 @@ $(document).ready(function () {
       doTranslation('home_item_info_type_name', ['x_subtypes_plushies']);
     } else if (PATHNAME.endsWith('/hobby/doll')) {
       doTranslation('home_item_info_type_name', ['x_subtypes_dolls']);
-    } else if (PATHNAME === '/') {
+    } else if (PATHNAME === '/' || PATHNAME.endsWith('/index/home')) {
 		doTranslation('home_item_info_type_name', ['home_image_type_name']);
 	}
     
@@ -1329,7 +1329,7 @@ $(document).ready(function () {
 		testTranslationMap('search_item_props');
     if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
     PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
-     PATHNAME.endsWith('/hobby/doll') || PATHNAME === '/') {
+     PATHNAME.endsWith('/hobby/doll') || PATHNAME === '/' || PATHNAME.endsWith('/index/home')) {
       testTranslationMap('home_item_database_tabs');
       testTranslationMap('home_item_popular_tabs');
       testTranslationMapForDic('home_item_popular_hits', ['home_item_popular_hits']);
@@ -1348,7 +1348,7 @@ $(document).ready(function () {
 		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_plushies']);
 		} else if (PATHNAME.endsWith('/hobby/doll')) {
 		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_dolls']);
-		} else if (PATHNAME === '/') {
+		} else if (PATHNAME === '/' || PATHNAME.endsWith('/index/home')) {
 			testTranslationMapForDic('home_item_info_type_name', ['home_image_type_name']);
 		}
     }

@@ -548,6 +548,7 @@ const TRANSLATIONS = {
       '真实模型' : 'Real models',
       '毛绒布偶' : 'Plushies',
       'Doll娃娃' : 'Dolls',
+		'GK/DIY模型' : 'Garage kits/models'
     },
     'x_subtypes_figures' : {
 			'比例人形' : 'Scale figure',
@@ -871,8 +872,16 @@ const testTranslationMapForDic = function (placeToCheck, dictionaries) {
   $(PLACES[placeToCheck]).each(function(i,e) {
     let translationIsDone = 0;
     let translatedText = e.textContent.trim();
+	if (translatedText.length == 0) {return; /*continue*/}
     for(const subDictionary of dictionaries) {
-      for(const subDictionaryEntry of Object.entries(TRANSLATIONS.en[subDictionary])) { /*[0] key [1] value*/
+		let subDictionaryEntries = [];
+		if ($.type(myVar) === "string") {
+			subDictionaryEntries = Object.entries(TRANSLATIONS.en[subDictionary]);
+		} else {
+			subDictionaryEntries = subDictionary;
+		}
+
+      for(const subDictionaryEntry of subDictionaryEntries) { /*[0] key [1] value*/
         translationIsDone = translatedText.includes(subDictionaryEntry[1]);
         if (translationIsDone) {
           break;
@@ -958,6 +967,7 @@ const section = {
     $(me.places[placeToCheck]).each(function(i,e) {
       let translationIsDone = 0;
       let translatedText = e.textContent.trim();
+		if (translatedText.length == 0) {return; /*continue*/}
       for(const subDictionaryName of dictionaries) {
           let subDictionary;
           if (typeof(subDictionaryName) === 'string') {
@@ -1011,6 +1021,7 @@ let nav_top_section = Object.create(section);
       'nav_top_right_menu' : {
         '360°照片' : '360° pics',
         '厂商' : 'Makers',
+		'小黑屋' : 'Reports',
         '商城' : 'Mall',
         '登录' : 'Login',
       },
@@ -1025,6 +1036,8 @@ let nav_top_section = Object.create(section);
         '二手专区' : 'Preowned',
         '淘宝自营店' : 'Taobao own shop',
         '淘宝天狗店' : 'Taobao Tengu shop',
+		'淘宝周边店' : 'Taobao other shop',
+		'淘宝一番赏' : 'Taobao rewards'
       },
       'nav_top_personal' : {
         '个人中心' : 'Profile',
@@ -1053,8 +1066,8 @@ let nav_top_section = Object.create(section);
   nav_top_section.places = {
     'nav_top_left_menu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > a',
     'nav_top_left_submenu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
-    'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a',
-    'nav_top_right_get_app'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > div.icon-Mobile-phone span',
+    'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a:not(.icon-mobile-phone)',
+    'nav_top_right_get_app'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > .icon-Mobile-phone span',
     'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
     'nav_top_personal'	: '.hpoi-navpersonals > .hpoi-navpersonal > li > a',
     'nav_top_search_drop_list'	: '.nav-conters-right .dropdown-menu > li > a',
@@ -1092,7 +1105,7 @@ $(document).ready(function () {
   
   nav_top_section.translate();
   //3 pages in one
-  doTranslation('hpoi_box_title');
+  doTranslation('hpoi_box_title', ['hpoi_box_title', 'x_item_types_plural']);
   
   if (PATHNAME.includes('/user/home') || PATHNAME == '/') {
     doTranslation('profile_stats');
@@ -1107,9 +1120,9 @@ $(document).ready(function () {
     let relativeTimes = $('span.type-time');
   	translateRelativeDate(relativeTimes);
   }
-  if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
+  if (PATHNAME === '/' || PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
     PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
-     PATHNAME.endsWith('/hobby/doll')) {
+     PATHNAME.endsWith('/hobby/doll')) { 
     doTranslation(null, ['search_item_props'], 'dic_first', $(PLACES['home_item_props']));
     doTranslation('home_item_database_tabs');
     doTranslation('home_item_popular_tabs');
@@ -1132,7 +1145,9 @@ $(document).ready(function () {
       doTranslation('home_item_info_type_name', ['x_subtypes_plushies']);
     } else if (PATHNAME.endsWith('/hobby/doll')) {
       doTranslation('home_item_info_type_name', ['x_subtypes_dolls']);
-    }
+    } else if (PATHNAME === '/') {
+		doTranslation('home_item_info_type_name', ['home_image_type_name']);
+	}
     
   }
   if(PATHNAME.includes("/hobby/")) {
@@ -1308,11 +1323,13 @@ $(document).ready(function () {
     expect(TRANSLATIONS).toExist("TRANSLATIONS is empty!");
     expect(TRANSLATIONS.en).toExist("English is somehow empty!");
 
-    testTranslationMap('hpoi_box_title');
+	nav_top_section.testTranslation();
+
+    testTranslationMapForDic('hpoi_box_title', ['hpoi_box_title', 'x_item_types_plural']);
 		testTranslationMap('search_item_props');
     if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
     PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
-     PATHNAME.endsWith('/hobby/doll')) {
+     PATHNAME.endsWith('/hobby/doll') || PATHNAME === '/') {
       testTranslationMap('home_item_database_tabs');
       testTranslationMap('home_item_popular_tabs');
       testTranslationMapForDic('home_item_popular_hits', ['home_item_popular_hits']);
@@ -1320,7 +1337,20 @@ $(document).ready(function () {
       testTranslationMapForDic('home_item_info_sub_filter', ['home_action_type_sub_filter']);
       testTranslationMapForDic('home_item_info_action_type', ['home_edit_action_type']);
       testTranslationMapForDic('home_item_info_type_long', ['home_username_info_type']);
-    	//testTranslationMapForDic('home_item_info_type_name', ['home_image_type_name']);
+    
+		if (PATHNAME.endsWith('/hobby/')) {
+		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_figures']);
+		} else if (PATHNAME.endsWith('/hobby/model')) {
+		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_anime_models']);
+		} else if (PATHNAME.endsWith('/hobby/real')) {
+		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_real_models']);
+		} else if (PATHNAME.endsWith('/hobby/moppet')) {
+		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_plushies']);
+		} else if (PATHNAME.endsWith('/hobby/doll')) {
+		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_dolls']);
+		} else if (PATHNAME === '/') {
+			testTranslationMapForDic('home_item_info_type_name', ['home_image_type_name']);
+		}
     }
     
     if (PATHNAME.includes('/hobby/all')) {

@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates text on Hpoi website to easily navigate
-// @version  0.3
+// @version  0.3.1
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js

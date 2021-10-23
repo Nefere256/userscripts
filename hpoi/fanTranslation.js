@@ -1028,6 +1028,11 @@ let nav_top_section = Object.create(section);
       'nav_top_right_get_app' : {
         '下载客户端' : 'Apps',
       },
+		'nav_top_get_app_submenu' : {
+			'点击下载APP' : 'Download the app',
+			'扫码关注公众号' : 'Scan to follow WeChat account',
+			'扫码加入Q群:884038717' : 'Scan to join WeChat group',
+	},
       'nav_top_right_submenu' : {
         '厂商首页' : 'Home',
         '我的收藏' : 'My collection',
@@ -1066,12 +1071,16 @@ let nav_top_section = Object.create(section);
   nav_top_section.places = {
     'nav_top_left_menu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > a',
     'nav_top_left_submenu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
-    'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a:not(.icon-mobile-phone)',
+    'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a:not(.icon-Mobile-phone)',
     'nav_top_right_get_app'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > .icon-Mobile-phone span',
+	'nav_top_right_get_app_submenu'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > .icon-Mobile-phone ul > li > a > div',
     'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
     'nav_top_personal'	: '.hpoi-navpersonals > .hpoi-navpersonal > li > a',
     'nav_top_search_drop_list'	: '.nav-conters-right .dropdown-menu > li > a',
     'nav_top_search_drop_list_default'	: '#searchItemTypeText',
+	'nav_top_narrow_screen_menu' : '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a:not(.hpoi-icon-phonebox)',
+	'nav_top_narrow_screen_get_app' : '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a.hpoi-icon-phonebox > span','nav_top_narrow_screen_get_app_submenu' : '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a.hpoi-icon-phonebox + ul > li > a > div',
+	'nav_top_narrow_screen_submenu' : '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a:not(.hpoi-icon-phonebox) + ul > li > a',
   };
   
 nav_top_section.translate = function() {
@@ -1079,11 +1088,16 @@ nav_top_section.translate = function() {
     this.doTranslation('nav_top_left_submenu');
     $('.hpoi-garagekit-box').css('width', '178px').css('margin-left', '-86px');
     this.doTranslation('nav_top_right_menu');
-    this.doTranslation("nav_top_right_get_app");
+    this.doTranslation('nav_top_right_get_app');
+    this.doTranslation('nav_top_right_get_app_submenu', ['nav_top_get_app_submenu']);
     this.doTranslation("nav_top_right_submenu");
     this.doTranslation("nav_top_personal");
     this.doTranslation('nav_top_search_drop_list', ['nav_top_search_drop_list', TRANSLATIONS.en['x_item_types']]);
     this.doTranslation('nav_top_search_drop_list_default');
+	this.doTranslation('nav_top_narrow_screen_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu', 'nav_top_right_menu']);
+	this.doTranslation('nav_top_narrow_screen_get_app', ['nav_top_right_get_app']);
+    this.doTranslation('nav_top_narrow_screen_get_app_submenu', ['nav_top_get_app_submenu']);
+	this.doTranslation('nav_top_narrow_screen_submenu', ['nav_top_left_submenu', 'nav_top_right_submenu']);
   };
 
 nav_top_section.testTranslation = function () {
@@ -1091,11 +1105,15 @@ nav_top_section.testTranslation = function () {
   this.testTranslationMap("nav_top_left_submenu");
   this.testTranslationMap("nav_top_right_menu");
   this.testTranslationMap("nav_top_right_get_app");
+    this.testTranslationMapForDic('nav_top_right_get_app_submenu', ['nav_top_get_app_submenu']);
   this.testTranslationMap("nav_top_right_submenu");
   this.testTranslationMap("nav_top_personal");
   this.testTranslationMapForDic('nav_top_search_drop_list', ['nav_top_search_drop_list', TRANSLATIONS.en['x_item_types']]);
   this.testTranslationMap('nav_top_search_drop_list_default');
-  
+	this.testTranslationMapForDic('nav_top_narrow_screen_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu', 'nav_top_right_menu']);
+	this.testTranslationMapForDic('nav_top_narrow_screen_get_app', ['nav_top_right_get_app']);
+    this.testTranslationMapForDic('nav_top_narrow_screen_get_app_submenu', ['nav_top_get_app_submenu']);
+	this.testTranslationMapForDic('nav_top_narrow_screen_submenu', ['nav_top_left_submenu', 'nav_top_right_submenu']);
 };
 
 

@@ -13,6 +13,7 @@
 // @grant    none
 // ==/UserScript==
 
+(function() {
 /* 
 Expect library by mjackson https://github.com/mjackson/expect
 */
@@ -25,67 +26,9 @@ Expect library by mjackson https://github.com/mjackson/expect
 	/* ==== RESOURCES ===== */
 
 const TRANSLATIONS = {
-  // 'word' : 'translation'
+  // 'dictionary' : {
+  // 'word' : 'translation', }
   en: {
-    'nav_top_left_menu' : {
-      'GK/DIY' : 'GK/DIY',
-    },
-    'nav_top_left_submenu' : {
-      '分区首页' : 'Home',
-      '资料库' : 'Database',
-      '相册' : 'Albums',
-			'最新发售' : 'Latest releases',
-			'最新入库' : 'Newly added',
-			'好评' : 'Best rated',
-      '再版愿望' : 'Most wished',
-      '我的收藏' : 'My collection',
-      '上报缺失' : 'Report missing info',
-      /* DIY only */
-      '原创作品' : 'Made from scratch',
-      '灰模上色' : 'Painted',
-      '改造' : 'Customs',
-      '翻新修复' : 'Repairs',
-      '发布' : 'Publish'
-    },
-    'nav_top_right_menu' : {
-      '360°照片' : '360° pics',
-      '厂商' : 'Makers',
-      '商城' : 'Mall',
-      '登录' : 'Login',
-    },
-    'nav_top_right_get_app' : {
-      '下载客户端' : 'Apps',
-    },
-    'nav_top_right_submenu' : {
-      '厂商首页' : 'Home',
-  		'我的收藏' : 'My collection',
-  		'上报缺失' : 'Report missing info',
-      '商品上新' : 'Recent sales',
-			'二手专区' : 'Preowned',
-      '淘宝自营店' : 'Taobao own shop',
-      '淘宝天狗店' : 'Taobao Tengu shop',
-    },
-    'nav_top_personal' : {
-      '个人中心' : 'Profile',
-      '我的收藏' : 'Favorites',
-      '返现申请' : 'Cashback',
-      '好友' : 'Friends',
-      '消息' : 'Messages',
-      '账号设置' : 'Settings',
-      '退出' : 'Logout',
-    },
-    'nav_top_search_drop_list' : {
-      '全部周边' : 'All',
-      '角色' : 'Character',
-      '作品' : 'Series',
-      '系列' : 'Line',
-      '人物' : 'Person',
-      '厂商' : 'Company',
-      '用户' : 'User',
-    },
-    'nav_top_search_drop_list_default' : {
-      '全部周边' : 'All',
-    },
     'profile_stats' : {
     	'关注' : 'attention',
     	'粉丝' : 'followers',
@@ -664,15 +607,6 @@ const TRANSLATIONS = {
 
   
 const PLACES = {
-  /* NAV TOP BAR */
-  'nav_top_left_menu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > a',
-  'nav_top_left_submenu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
-  'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a',
-  'nav_top_right_get_app'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > div.icon-Mobile-phone span',
-  'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
-  'nav_top_personal'	: '.hpoi-navpersonals > .hpoi-navpersonal > li > a',
-  'nav_top_search_drop_list'	: '.nav-conters-right .dropdown-menu > li > a',
-  'nav_top_search_drop_list_default'	: '#searchItemTypeText',
   /* OTHER */
   'hpoi_box_title'	: 'div.hpoi-box-title > .hpoi-title-left span',
   'profile_stats'	: '.user-box-content > .row > div',
@@ -954,20 +888,209 @@ const testTranslationMapForDic = function (placeToCheck, dictionaries) {
   
 };
 
+/* SECTIONS */
+
+const section = {
+  translations : {},
+  places : {},
+  
+  doTranslation(itemInQuestion, subDictionaries = [], elementsInQuestion) {
+    const me = this;
+    let items;
+    if(!elementsInQuestion)
+      items = $(this.places[itemInQuestion]);
+    else
+      items = elementsInQuestion;
+
+    let textItems = items.contents().filter(function() {
+      return this.nodeType === Node.TEXT_NODE;
+    });
+
+    textItems.each(function(i,e) {
+      if (!subDictionaries.length) {
+        let bad = e.textContent.trim();
+        let translation = me.translations.en[itemInQuestion][bad];
+        if (translation) {
+          e.textContent = translation;
+        }
+      } else {
+        let translationDone = 0;
+        e.textContent = e.textContent.trim();
+        let toTranslate = e.textContent;
+        for(const subDictionaryName of subDictionaries) {
+          let subDictionary;
+          if (typeof(subDictionaryName) === 'string') {
+            subDictionary = me.translations.en[subDictionaryName];
+          } else {
+            subDictionary = subDictionaryName;
+          }
+          
+          for(const subDictionaryEntry of Object.entries(subDictionary)) { /*[0] key [1] value*/
+            e.textContent = toTranslate.replace(subDictionaryEntry[0], subDictionaryEntry[1]);
+            if (e.textContent != toTranslate) {
+              translationDone = 1;
+              break;
+            }
+          }
+          if (translationDone) {
+            break;
+          } 
+        }
+      }
+    });
+  },
+  
+  testTranslationMap(submapToCheck) {
+    const me = this;
+    expect(me.places[submapToCheck]).toExist("jquery for [" + submapToCheck + "] should exists.");
+    expect($(me.places[submapToCheck])).toExist("items found via jquery for [" + submapToCheck + "] should exist.");
+    $(me.places[submapToCheck]).each(function(i,e) {
+      expect(Object.values(me.translations.en[submapToCheck]).find(translation => translation.includes(e.textContent.trim())))
+        .toBeTruthy("No translation provided for [" + e.textContent + "] in [" + submapToCheck + "] map!");
+    });
+  },
+  
+  testTranslationMapForDic(placeToCheck, dictionaries) {
+    const me = this;
+    expect(me.places[placeToCheck]).toExist("jquery for [" + placeToCheck + "] should exists.");
+    expect($(me.places[placeToCheck])).toExist("items found via jquery for [" + placeToCheck + "] should exist.");
+
+    $(me.places[placeToCheck]).each(function(i,e) {
+      let translationIsDone = 0;
+      let translatedText = e.textContent.trim();
+      for(const subDictionaryName of dictionaries) {
+          let subDictionary;
+          if (typeof(subDictionaryName) === 'string') {
+            subDictionary = me.translations.en[subDictionaryName];
+          } else {
+            subDictionary = subDictionaryName;
+          }
+        for(const subDictionaryEntry of Object.entries(subDictionary)) { /*[0] key [1] value*/
+          translationIsDone = translatedText.includes(subDictionaryEntry[1]);
+          if (translationIsDone) {
+            break;
+          }
+        }
+        if (translationIsDone) {
+          break;
+        }
+      }
+      expect(translationIsDone).toBeTruthy(
+        "No translation provided for [" + translatedText + "] in [" + dictionaries.join() + "] maps!");
+    });
+  },
+  
+};
+
+
+
+let nav_top_section = Object.create(section);
+
+  nav_top_section.translations = {
+    en : {
+      'nav_top_left_menu' : {
+        'GK/DIY' : 'GK/DIY',
+      },
+      'nav_top_left_submenu' : {
+        '分区首页' : 'Home',
+        '资料库' : 'Database',
+        '相册' : 'Albums',
+        '最新发售' : 'Latest releases',
+        '最新入库' : 'Newly added',
+        '好评' : 'Best rated',
+        '再版愿望' : 'Most wished',
+        '我的收藏' : 'My collection',
+        '上报缺失' : 'Report missing info',
+        /* DIY only */
+        '原创作品' : 'Made from scratch',
+        '灰模上色' : 'Painted',
+        '改造' : 'Customs',
+        '翻新修复' : 'Repairs',
+        '发布' : 'Publish'
+      },
+      'nav_top_right_menu' : {
+        '360°照片' : '360° pics',
+        '厂商' : 'Makers',
+        '商城' : 'Mall',
+        '登录' : 'Login',
+      },
+      'nav_top_right_get_app' : {
+        '下载客户端' : 'Apps',
+      },
+      'nav_top_right_submenu' : {
+        '厂商首页' : 'Home',
+        '我的收藏' : 'My collection',
+        '上报缺失' : 'Report missing info',
+        '商品上新' : 'Recent sales',
+        '二手专区' : 'Preowned',
+        '淘宝自营店' : 'Taobao own shop',
+        '淘宝天狗店' : 'Taobao Tengu shop',
+      },
+      'nav_top_personal' : {
+        '个人中心' : 'Profile',
+        '我的收藏' : 'Favorites',
+        '返现申请' : 'Cashback',
+        '好友' : 'Friends',
+        '消息' : 'Messages',
+        '账号设置' : 'Settings',
+        '退出' : 'Logout',
+      },
+      'nav_top_search_drop_list' : {
+        '全部周边' : 'All',
+        '角色' : 'Character',
+        '作品' : 'Series',
+        '系列' : 'Line',
+        '人物' : 'Person',
+        '厂商' : 'Company',
+        '用户' : 'User',
+      },
+      'nav_top_search_drop_list_default' : {
+        '全部周边' : 'All',
+      },
+    },
+  };
+  
+  nav_top_section.places = {
+    'nav_top_left_menu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > a',
+    'nav_top_left_submenu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
+    'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a',
+    'nav_top_right_get_app'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > div.icon-Mobile-phone span',
+    'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
+    'nav_top_personal'	: '.hpoi-navpersonals > .hpoi-navpersonal > li > a',
+    'nav_top_search_drop_list'	: '.nav-conters-right .dropdown-menu > li > a',
+    'nav_top_search_drop_list_default'	: '#searchItemTypeText',
+  };
+  
+nav_top_section.translate = function() {
+    this.doTranslation('nav_top_left_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu']);
+    this.doTranslation('nav_top_left_submenu');
+    $('.hpoi-garagekit-box').css('width', '178px').css('margin-left', '-86px');
+    this.doTranslation('nav_top_right_menu');
+    this.doTranslation("nav_top_right_get_app");
+    this.doTranslation("nav_top_right_submenu");
+    this.doTranslation("nav_top_personal");
+    this.doTranslation('nav_top_search_drop_list', ['nav_top_search_drop_list', TRANSLATIONS.en['x_item_types']]);
+    this.doTranslation('nav_top_search_drop_list_default');
+  };
+
+nav_top_section.testTranslation = function () {
+  this.testTranslationMapForDic("nav_top_left_menu", [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu']);
+  this.testTranslationMap("nav_top_left_submenu");
+  this.testTranslationMap("nav_top_right_menu");
+  this.testTranslationMap("nav_top_right_get_app");
+  this.testTranslationMap("nav_top_right_submenu");
+  this.testTranslationMap("nav_top_personal");
+  this.testTranslationMapForDic('nav_top_search_drop_list', ['nav_top_search_drop_list', TRANSLATIONS.en['x_item_types']]);
+  this.testTranslationMap('nav_top_search_drop_list_default');
+  
+};
+
 
 $(document).ready(function () {
 	console.log('translating starting...');
   const PATHNAME = window.location.pathname;
   
-  doTranslation('nav_top_left_menu', ['x_item_types_plural', 'nav_top_left_menu']);
-  doTranslation('nav_top_left_submenu');
-  $('.hpoi-garagekit-box').css('width', '178px').css('margin-left', '-86px');
-  doTranslation('nav_top_right_menu');
-  doTranslation("nav_top_right_get_app");
-  doTranslation("nav_top_right_submenu");
-  doTranslation("nav_top_personal");
-  doTranslation('nav_top_search_drop_list', ['nav_top_search_drop_list', 'x_item_types']);
-  doTranslation('nav_top_search_drop_list_default');
+  nav_top_section.translate();
   //3 pages in one
   doTranslation('hpoi_box_title');
   
@@ -1185,14 +1308,6 @@ $(document).ready(function () {
     expect(TRANSLATIONS).toExist("TRANSLATIONS is empty!");
     expect(TRANSLATIONS.en).toExist("English is somehow empty!");
 
-    testTranslationMapForDic("nav_top_left_menu", ['x_item_types_plural', 'nav_top_left_menu']);
-    testTranslationMap("nav_top_left_submenu");
-    testTranslationMap("nav_top_right_menu");
-    testTranslationMap("nav_top_right_get_app");
-    testTranslationMap("nav_top_right_submenu");
-  	testTranslationMap("nav_top_personal");
-  	testTranslationMapForDic('nav_top_search_drop_list', ['nav_top_search_drop_list', 'x_item_types']);
-    //testTranslationMap('nav_top_search_drop_list_default');
     testTranslationMap('hpoi_box_title');
 		testTranslationMap('search_item_props');
     if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
@@ -1284,5 +1399,6 @@ $(document).ready(function () {
   });
 
 
-console.log('script loading finished');           
-  
+console.log('script loading finished');  
+     
+ })();

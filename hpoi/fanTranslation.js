@@ -722,63 +722,6 @@ const translateRelativeDate = function(datesTextesReleaseDate) {
 		});
 };
 
-  /* do stuff to translate text like
-  系列 共13个 => Lines, total of 13
-  系列 共4个 => Lines, total of 4
-  制作周边 共596个, 评分4.44 => Made works, total of 596, rating 4.44
-  制作周边 共220个, 评分4.33 => Made works, total of 220, rating 4.33
-  发行周边 共297个 => Distributed works, total of 220
-  发行周边 共1个 => Distributed works, total of 1
-  她参与的手办 共110个, 评分4.43 => Figures worked on, total of 110, rating 4.43
-  他参与的手办 共288个, 评分4.38 => Figures worked on, total of 288, rating 4.38
-  
-  so
-  * 1st part - get before Chinese space, translate it as dic sugessts
-  * 2nd part - optional if space exists, get between Chinese space and coma (or end of string, if it comes), get a number and add the text
-  * 3rd part - optional, after the coma, get a number and add the text
-  */
-  let translateEncyclopediaItemsHeader = function(element, dic) {
-    let textToTranslate = element.textContent.trim();
-    let translation = "";
-    let secondPartExists = textToTranslate.indexOf(" ") != -1;
-    let title = "";
-   // * 1st part - get before Chinese space, translate it as dic sugessts
-    if (secondPartExists) {
-    	title = textToTranslate.substring(0, textToTranslate.indexOf(" "));
-    } else {
-      title = textToTranslate;
-    }
-    
-    let titleTranslation = TRANSLATIONS.en[dic][title];
-    
-    if (!titleTranslation)
-      return;
-    
-    translation += TRANSLATIONS.en[dic][title];
-    
-    if (secondPartExists) {
-    
-      //* 2nd part - optional if space exists, get between Chinese space and coma (or end of string, if it comes), get a number and add the text
-     //* 3rd part - optional, after the coma, get a number and add the text
-      let thirdPartExists = textToTranslate.indexOf(",") != -1;
-      let total = null;
-      let rating = null;
-      if (thirdPartExists) {
-        total = textToTranslate.substring(textToTranslate.indexOf(" ") + 2, textToTranslate.indexOf(",") - 1);
-        rating = textToTranslate.substring(textToTranslate.indexOf(",") + 4);
-      } else {
-        total = textToTranslate.substring(textToTranslate.indexOf(" ") + 2, textToTranslate.length - 1);
-      }
-      
-      translation += ", total of " + total;
-      if (thirdPartExists) {
-        translation += ", average rating " + rating;
-      }
-    }
-    element.textContent = translation;
-    
-  };
-
 /* ==== TESTS ===== */
 
 const testTranslationMap = function (submapToCheck) {
@@ -1065,10 +1008,12 @@ encyclopedia_section.translations = {
 			'微博：' : 'Weibo: ',
 
 			'成立时间：' : 'Founded date: ',
+			'成立日期：' : 'Founded date: ',
 			'所在地：' : 'Location: ',
       
 			'性别：' : 'Sex: ',
 			'生日：' : 'Birthday date: ',
+			'星座：' : 'Zodiac: ',
 			'家庭情况：' : 'Family info: ',
 			'前任监护人：' : 'Former guardian: ',
 			'监护人：' : 'Guardian: ',
@@ -1096,27 +1041,31 @@ encyclopedia_section.translations = {
 			'放送星期：' : 'Week day of stream.: ',
 			'发行日期：' : 'Released: ',
 			'开发：' : 'Developed: ',
-    },
-    'encyclopedia_series_types' : {
-      '动画' : 'Video',
-      '游戏' : 'Game',
-      '其它' : 'Other',
-    },
+		},
+		'encyclopedia_series_types' : {
+			'动画' : 'Video',
+			'游戏' : 'Game',
+			'其它' : 'Other',
+	},
 		'encyclopedia_items_section' : {
-			'详情': 'Info', //
+			'详情': 'Info', 
 			'自营周边' : 'Sold by Hpoi',
+			'相关商品' : 'Related products',
 			'最新作品' : 'Latest items',
-			'关联手办' : 'Related figures',
-			'系列' : 'Lines', //
-			'制作周边' : 'Items manufactured',//
-			'发行周边' : 'Items distributed', //
+			'关联手办' : 'Related figures', 
+			'相关手办' : 'Related figures',
+			'系列' : 'Lines', 
+			'制作周边' : 'Items manufactured',
+			'发行周边' : 'Items distributed', 
+			'关联周边' : 'Related items', 
+			'相关周边' : 'Related items',
 			'她参与的手办' : 'Figures worked on',
 			'他参与的手办' : 'Figures worked on',
 			'评论' : 'Comments'
     },
-    'encyclopedia_items_more' : {
-      '查看更多' : 'see more',
-    },
+		'encyclopedia_items_more' : {
+			'全部' : 'more',
+		},
 	},
 };
 encyclopedia_section.places = {
@@ -1124,34 +1073,70 @@ encyclopedia_section.places = {
   'encyclopedia_nav' : '.hpoi-company-dropdown > .company-edit > a',
   'encyclopedia_nav_submenu' : '.hpoi-company-dropdown > .company-edit > ul > li > a',
   'encyclopedia_infobox_props' : '.company-ibox > div.row > div.item-details',
-  'encyclopedia_items_more' : '.subfield a',
+  'encyclopedia_items_more' : '.company-ibox > .item-head a.hpoi-btn-more > span',
   'encyclopedia_items_header_list' : '.hpoi-company-nav > div > a.nav-item',
   'encyclopedia_items_header' : '.company-ibox > .item-head > div > h3',
+  'encyclopedia_items_header_count' : '.company-ibox > .item-head > div > span',
+  'encyclopedia_items_glyph_props' : 'ul.hpoi-glyphicons-list > li > .hpoi-detail-grid-right > .hpoi-detail-grid-info > span > em',
 };
 encyclopedia_section.isToTranslate = function () {
 	const PATHNAME = window.location.pathname;
-	if (PATHNAME.includes('/company/') ) {
+	if (PATHNAME.includes('/company/') || PATHNAME.includes('/series/') 
+		|| PATHNAME.includes('/works') || PATHNAME.includes('/charactar/') 
+		|| PATHNAME.includes('/person/')) {
 		return true;
 	}
 	return false;
 };
 
+  /* do stuff to translate text like
+	共8个相关商品	=> Total 8 related products
+	共153条	=> Total 153 (lines, comments)
+	共3723个	=> Total 153 (items)
+	共91个相关周边	=> Total 91 related items
+	共29个相关手办	=> Total 29 related figures
+
+	1st part > up to counter like  个, 条
+	2nd part > after counter, translate according to dictionary
+  */
+encyclopedia_section.translateEncyclopediaItemsHeader = function(element, dicDef) {
+    let textToTranslate = element.textContent.trim();
+    let translation = "";
+	// let counterSymbol = ['个', '条'];
+	let partsSplittedByCounters = textToTranslate.split(/[个条]+/);
+
+	let numberPart = partsSplittedByCounters[0];
+	let number = numberPart.substring(1);
+	translation += "Total ";
+	translation += number;
+
+	let secondPartTranslation = "";
+	let secondPartExists = partsSplittedByCounters.length == 2;
+	if (secondPartExists && partsSplittedByCounters[1].length > 0) {
+		secondPartTranslation = (dicDef[partsSplittedByCounters[1]]).toLowerCase();
+
+		translation += " ";
+		translation += secondPartTranslation;
+	}
+    element.textContent = translation;
+  };
+
 encyclopedia_section.translate = function() {
-	if (this.isToTranslate()) {
-		this.doTranslation('encyclopedia_nav');
-		this.doTranslation('encyclopedia_nav_submenu');
-		this.doTranslation('encyclopedia_items_header_list', ['encyclopedia_items_section']);
-		this.doTranslation('encyclopedia_items_header', ['encyclopedia_items_section']);
-		this.doTranslation('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
+	const me = this;
+	if (me.isToTranslate()) {
+		me.doTranslation('encyclopedia_nav');
+		me.doTranslation('encyclopedia_nav_submenu');
+		me.doTranslation('encyclopedia_items_header_list', ['encyclopedia_items_section']);
+		me.doTranslation('encyclopedia_items_header', ['encyclopedia_items_section']);
+		me.doTranslation('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
+		me.doTranslation('encyclopedia_items_more');
+
+		$(me.places['encyclopedia_items_header_count']).each(function(index, element) {
+			me.translateEncyclopediaItemsHeader(element, me.translations['en']['encyclopedia_items_section']);
+		});
+		me.doTranslation('encyclopedia_items_glyph_props', [TRANSLATIONS.en['search_item_props']])
 	}
 
-/*
-	  $(PLACES['encyclopedia_items_section']).each(function(index, element) {
-		translateEncyclopediaItemsHeader(element, 'encyclopedia_items_section');
-	  });
-	  
-	  doTranslation('encyclopedia_items_more');
-*/
 };
 encyclopedia_section.testTranslation = function () {
 	if ( this.isToTranslate()) {
@@ -1160,15 +1145,8 @@ encyclopedia_section.testTranslation = function () {
 		this.testTranslationMapForDic('encyclopedia_items_header_list', ['encyclopedia_items_section']);
 		this.testTranslationMapForDic('encyclopedia_items_header', ['encyclopedia_items_section']);
 		this.testTranslationMapForDic('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
+		this.testTranslationMap('encyclopedia_items_more');
 	}
-	//this.testTranslationMapForDic("nav_top_left_menu", [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu']);
-	//this.testTranslationMap("nav_top_left_submenu");
-
-/*
-    testTranslationMap('encyclopedia_nav');
- 		testTranslationMapForDic('encyclopedia_items_section', ['encyclopedia_items_section']);
-    testTranslationMap('encyclopedia_items_more');
-*/
 };
 
 $(document).ready(function () {

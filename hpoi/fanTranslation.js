@@ -2,8 +2,8 @@
 // @name     Hpoi fan translation
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
-// @description A script that translates text on Hpoi website to easily navigate
-// @version  0.3.1
+// @description A script that translates common text on Hpoi - anime figures database
+// @version  0.3.2
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -349,89 +349,19 @@ const TRANSLATIONS = {
     
     },
     
-    /* Encyclopedia */
-    'encyclopedia_nav' : {
-      '概述' : 'Overview',
-      '作品' : 'Works',
-      '关联作品' : 'Related works',
-      '参与作品' : 'Works',
-      '用户收藏' : 'User favs',
-      '编辑' : 'Edit',
-      '推送动态' : 'Push action',
-      '加入收藏' : 'Add to favs',
-      '取消收藏' : 'Remove from favs',
-    },
-    'encyclopedia_infobox_props' : {
-      '名称:' : 'Name:',
-      '中文名:' : 'Chinese name:',
-      '别名:' : 'Aliases:',
-      '官网:' : 'Website:',
-      '官方网站:' : 'Official website:',
-      '官方微博:' : 'Official Weibo:',
-      '推特:' : 'Twitter',
-      
-      '成立时间:' : 'Founded date:',
-      '所在地:' : 'Location:',
-      
-      '性别:' : 'Sex:',
-      '生日:' : 'Birthday date:',
-      '家庭情况:' : 'Family info:',
-      '前任监护人:' : 'Former guardian:',
-      '监护人:' : 'Guardian:',
-      '血型:' : 'Blood type:',
-      '引用来源:' : 'Info source:',
-      'Anidb ID:' : 'Anidb ID:',
-      '母亲:' : 'Mother:',
-      '学籍:' : 'Student status:',
-      '种族:' : 'Race:',
-      '身高:' : 'Height:',
-      '年龄:' : 'Age:',
-      '体重:' : 'Weight:',
-      '三围:' : 'Body meas.:',
-      '出生地:' : 'Place of birth:',
-      '国籍:' : 'Nationality:',
-      '声优:' : 'Voice actor:',
-      '音源:' : 'Voice provider:',
-      '稀有度:' : 'Rarity:',
-			'编号:' : 'Number:',
-			'阵营:' : 'Faction:',
-      
-      '类型:' : 'Type:',
-      '时间:' : 'Time:',
-      '话数:' : 'Episodes:',
-      '放送星期:' : 'Week day of stream.:',
-      '发行日期:' : 'Released:',
-      '开发:' : 'Developed:',
-    },
-    'encyclopedia_series_types' : {
-      '动画' : 'Video',
-      '游戏' : 'Game',
-      '其它' : 'Other',
-    },
-    'encyclopedia_items_section' : {
-      '最新作品' : 'Latest items',
-      '关联手办' : 'Related figures',
-      '系列' : 'Lines',
-      '制作周边' : 'Items manufactured',
-      '发行周边' : 'Items distributed',
-      '她参与的手办' : 'Figures worked on',
-      '他参与的手办' : 'Figures worked on',
-    },
-    'encyclopedia_items_more' : {
-      '查看更多' : 'see more',
-    },
-    
     /*  SETTINGS */ 
     'settings_list' : {
       '基本资料' : 'General info',
       '屏蔽设置' : 'Block settings',
       '隐私设置' :  'Privacy settings',
+		'推送设置' : 'Notification settings',
       '修改密码' : 'Change password',
       '更换邮箱' : 'Change e-mail',
       '更换手机号' : 'Change phone number',
       '账号关联' : 'Account linking',
       '头像' : 'Avatar',
       '用户设置' : 'User settings',
+		'注销' : 'Delete account',
     },
     'settings_panel_button' : {
       '保存' : 'Save',
@@ -663,11 +593,6 @@ const PLACES = {
   'search_global_results_none' : 'div#result-content > div:not(.pull-right)',
   'search_global_page_ibox'	: '.ibox > .ibox-title > h5',
   'search_global_ibox_description' : '.ibox:first > .ibox-content *',
-  /* ENCYCLOPEDIA */
-  'encyclopedia_nav' : 'nav.navbar-inner > ul > li > a',
-  'encyclopedia_infobox_props' : 'table.info-box td.info-box-left',
-  'encyclopedia_items_more' : '.subfield a',
-  'encyclopedia_items_section' : '.subfield span',
   /* SETTINGS */ 
   'settings_list' : '.list-group > .list-group-item',
   'settings_panel_title' : '.panel > .panel-heading',
@@ -875,7 +800,7 @@ const testTranslationMapForDic = function (placeToCheck, dictionaries) {
 	if (translatedText.length == 0) {return; /*continue*/}
     for(const subDictionary of dictionaries) {
 		let subDictionaryEntries = [];
-		if ($.type(myVar) === "string") {
+		if ($.type(subDictionary) === "string") {
 			subDictionaryEntries = Object.entries(TRANSLATIONS.en[subDictionary]);
 		} else {
 			subDictionaryEntries = subDictionary;
@@ -917,11 +842,12 @@ const section = {
 
     textItems.each(function(i,e) {
       if (!subDictionaries.length) {
-        let bad = e.textContent.trim();
+		 e.textContent = e.textContent.trim();
+        const bad = e.textContent;
         let translation = me.translations.en[itemInQuestion][bad];
         if (translation) {
           e.textContent = translation;
-        }
+        } 
       } else {
         let translationDone = 0;
         e.textContent = e.textContent.trim();
@@ -1023,6 +949,7 @@ let nav_top_section = Object.create(section);
         '厂商' : 'Makers',
 		'小黑屋' : 'Reports',
         '商城' : 'Mall',
+		'消息' : 'Messages',
         '登录' : 'Login',
       },
       'nav_top_right_get_app' : {
@@ -1046,7 +973,7 @@ let nav_top_section = Object.create(section);
       },
       'nav_top_personal' : {
         '个人中心' : 'Profile',
-        '我的收藏' : 'Favorites',
+        '我的收藏' : 'My collection',
         '返现申请' : 'Cashback',
         '好友' : 'Friends',
         '消息' : 'Messages',
@@ -1073,9 +1000,9 @@ let nav_top_section = Object.create(section);
     'nav_top_left_submenu'	: '.hpoi-nav-tabbox > .nav-conters-left > li > .hpoi-garagekit-box  > li > a',
     'nav_top_right_menu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > a:not(.icon-Mobile-phone)',
     'nav_top_right_get_app'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > .icon-Mobile-phone span',
-	'nav_top_right_get_app_submenu'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > .icon-Mobile-phone ul > li > a > div',
-    'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box  > li > a',
-    'nav_top_personal'	: '.hpoi-navpersonals > .hpoi-navpersonal > li > a',
+	'nav_top_right_get_app_submenu'	: 'nav.nav-conters > div.hpoi-nav-tabbox > ul.nav-conters-right > li > ul.hpoi-Downloadclient > li > a > div',
+    'nav_top_right_submenu'	: '.hpoi-nav-tabbox > .nav-conters-right > li > .hpoi-garagekit-box > li > a',
+    'nav_top_personal'	: 'ul.hpoi-navpersonal > li > a',
     'nav_top_search_drop_list'	: '.nav-conters-right .dropdown-menu > li > a',
     'nav_top_search_drop_list_default'	: '#searchItemTypeText',
 	'nav_top_narrow_screen_menu' : '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a:not(.hpoi-icon-phonebox)',
@@ -1097,7 +1024,7 @@ nav_top_section.translate = function() {
 	this.doTranslation('nav_top_narrow_screen_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu', 'nav_top_right_menu']);
 	this.doTranslation('nav_top_narrow_screen_get_app', ['nav_top_right_get_app']);
     this.doTranslation('nav_top_narrow_screen_get_app_submenu', ['nav_top_get_app_submenu']);
-	this.doTranslation('nav_top_narrow_screen_submenu', ['nav_top_left_submenu', 'nav_top_right_submenu']);
+	this.doTranslation('nav_top_narrow_screen_submenu', ['nav_top_personal', 'nav_top_left_submenu', 'nav_top_right_submenu']);
   };
 
 nav_top_section.testTranslation = function () {
@@ -1113,9 +1040,136 @@ nav_top_section.testTranslation = function () {
 	this.testTranslationMapForDic('nav_top_narrow_screen_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu', 'nav_top_right_menu']);
 	this.testTranslationMapForDic('nav_top_narrow_screen_get_app', ['nav_top_right_get_app']);
     this.testTranslationMapForDic('nav_top_narrow_screen_get_app_submenu', ['nav_top_get_app_submenu']);
-	this.testTranslationMapForDic('nav_top_narrow_screen_submenu', ['nav_top_left_submenu', 'nav_top_right_submenu']);
+	this.testTranslationMapForDic('nav_top_narrow_screen_submenu', ['nav_top_personal', 'nav_top_left_submenu', 'nav_top_right_submenu']);
 };
 
+let encyclopedia_section = Object.create(section);
+encyclopedia_section.translations = {
+	en : {
+		'encyclopedia_nav' : {
+			'编辑' : 'Edit',
+		},
+		'encyclopedia_nav_submenu' : {
+			'基本资料' : 'Edit info',
+			'封面' : 'Edit cover'
+		},
+		'encyclopedia_infobox_props' : {
+			'名称：' : 'Name: ',
+			'中文名：' : 'Chinese name: ',
+			'别名：' : 'Aliases: ',
+			'地区：' : 'Country: ',
+			'官网：' : 'Website: ',
+			'官方网站：' : 'Official website: ',
+			'官方微博：' : 'Official Weibo: ',
+			'推特：' : 'Twitter: ',
+			'微博：' : 'Weibo: ',
+
+			'成立时间：' : 'Founded date: ',
+			'所在地：' : 'Location: ',
+      
+			'性别：' : 'Sex: ',
+			'生日：' : 'Birthday date: ',
+			'家庭情况：' : 'Family info: ',
+			'前任监护人：' : 'Former guardian: ',
+			'监护人：' : 'Guardian: ',
+			'血型：' : 'Blood type: ',
+			'引用来源：' : 'Info source: ',
+			'Anidb ID：' : 'Anidb ID: ',
+			'母亲：' : 'Mother: ',
+			'学籍：' : 'Student status: ',
+			'种族：' : 'Race: ',
+			'身高：' : 'Height: ',
+			'年龄：' : 'Age: ',
+			'体重：' : 'Weight: ',
+			'三围：' : 'Body meas.: ',
+			'出生地：' : 'Place of birth: ',
+			'国籍：' : 'Nationality: ',
+			'声优：' : 'Voice actor: ',
+			'音源：' : 'Voice provider: ',
+			'稀有度：' : 'Rarity: ',
+			'编号：' : 'Number: ',
+			'阵营：' : 'Faction: ',
+      
+			'类型：' : 'Type: ',
+			'时间：' : 'Time: ',
+			'话数：' : 'Episodes: ',
+			'放送星期：' : 'Week day of stream.: ',
+			'发行日期：' : 'Released: ',
+			'开发：' : 'Developed: ',
+    },
+    'encyclopedia_series_types' : {
+      '动画' : 'Video',
+      '游戏' : 'Game',
+      '其它' : 'Other',
+    },
+		'encyclopedia_items_section' : {
+			'详情': 'Info', //
+			'自营周边' : 'Sold by Hpoi',
+			'最新作品' : 'Latest items',
+			'关联手办' : 'Related figures',
+			'系列' : 'Lines', //
+			'制作周边' : 'Items manufactured',//
+			'发行周边' : 'Items distributed', //
+			'她参与的手办' : 'Figures worked on',
+			'他参与的手办' : 'Figures worked on',
+			'评论' : 'Comments'
+    },
+    'encyclopedia_items_more' : {
+      '查看更多' : 'see more',
+    },
+	},
+};
+encyclopedia_section.places = {
+  /* ENCYCLOPEDIA */
+  'encyclopedia_nav' : '.hpoi-company-dropdown > .company-edit > a',
+  'encyclopedia_nav_submenu' : '.hpoi-company-dropdown > .company-edit > ul > li > a',
+  'encyclopedia_infobox_props' : '.company-ibox > div.row > div.item-details',
+  'encyclopedia_items_more' : '.subfield a',
+  'encyclopedia_items_header_list' : '.hpoi-company-nav > div > a.nav-item',
+  'encyclopedia_items_header' : '.company-ibox > .item-head > div > h3',
+};
+encyclopedia_section.isToTranslate = function () {
+	const PATHNAME = window.location.pathname;
+	if (PATHNAME.includes('/company/') ) {
+		return true;
+	}
+	return false;
+};
+
+encyclopedia_section.translate = function() {
+	if (this.isToTranslate()) {
+		this.doTranslation('encyclopedia_nav');
+		this.doTranslation('encyclopedia_nav_submenu');
+		this.doTranslation('encyclopedia_items_header_list', ['encyclopedia_items_section']);
+		this.doTranslation('encyclopedia_items_header', ['encyclopedia_items_section']);
+		this.doTranslation('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
+	}
+
+/*
+	  $(PLACES['encyclopedia_items_section']).each(function(index, element) {
+		translateEncyclopediaItemsHeader(element, 'encyclopedia_items_section');
+	  });
+	  
+	  doTranslation('encyclopedia_items_more');
+*/
+};
+encyclopedia_section.testTranslation = function () {
+	if ( this.isToTranslate()) {
+		this.testTranslationMap('encyclopedia_nav');
+		this.testTranslationMap('encyclopedia_nav_submenu');
+		this.testTranslationMapForDic('encyclopedia_items_header_list', ['encyclopedia_items_section']);
+		this.testTranslationMapForDic('encyclopedia_items_header', ['encyclopedia_items_section']);
+		this.testTranslationMapForDic('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
+	}
+	//this.testTranslationMapForDic("nav_top_left_menu", [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu']);
+	//this.testTranslationMap("nav_top_left_submenu");
+
+/*
+    testTranslationMap('encyclopedia_nav');
+ 		testTranslationMapForDic('encyclopedia_items_section', ['encyclopedia_items_section']);
+    testTranslationMap('encyclopedia_items_more');
+*/
+};
 
 $(document).ready(function () {
 	console.log('translating starting...');
@@ -1125,7 +1179,7 @@ $(document).ready(function () {
   //3 pages in one
   doTranslation('hpoi_box_title', ['hpoi_box_title', 'x_item_types_plural']);
   
-  if (PATHNAME.includes('/user/home') || PATHNAME == '/') {
+  if (PATHNAME.includes('/user/home') || PATHNAME.includes('/index') || PATHNAME == '/') {
     doTranslation('profile_stats');
     doTranslation('profile_desc');
     doTranslation('home_action_type_filter');
@@ -1138,7 +1192,7 @@ $(document).ready(function () {
     let relativeTimes = $('span.type-time');
   	translateRelativeDate(relativeTimes);
   }
-  if (PATHNAME === '/'  || PATHNAME.endsWith('/index/home') || PATHNAME.endsWith('/hobby/') 
+  if (PATHNAME === '/'  || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home') || PATHNAME.endsWith('/hobby/') 
 	|| PATHNAME.endsWith('/hobby/model') || PATHNAME.endsWith('/hobby/real')
 	|| PATHNAME.endsWith('/hobby/moppet') || PATHNAME.endsWith('/hobby/doll')) { 
     doTranslation(null, ['search_item_props'], 'dic_first', $(PLACES['home_item_props']));
@@ -1163,7 +1217,7 @@ $(document).ready(function () {
       doTranslation('home_item_info_type_name', ['x_subtypes_plushies']);
     } else if (PATHNAME.endsWith('/hobby/doll')) {
       doTranslation('home_item_info_type_name', ['x_subtypes_dolls']);
-    } else if (PATHNAME === '/' || PATHNAME.endsWith('/index/home')) {
+    } else if (PATHNAME === '/' || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home')) {
 		doTranslation('home_item_info_type_name', ['home_image_type_name']);
 	}
     
@@ -1277,15 +1331,8 @@ $(document).ready(function () {
     doTranslation('search_global_ibox_description');
   }
   
-  doTranslation('encyclopedia_nav');
-  doTranslation('encyclopedia_infobox_props');
-  
-  $(PLACES['encyclopedia_items_section']).each(function(index, element) {
-    translateEncyclopediaItemsHeader(element, 'encyclopedia_items_section');
-  });
-  
-  doTranslation('encyclopedia_items_more');
-  
+	encyclopedia_section.translate();
+
   if (PATHNAME.includes('/user/edit/')) {
       doTranslation('settings_list');
       doTranslation('settings_panel_title', ['settings_list']);
@@ -1347,7 +1394,7 @@ $(document).ready(function () {
 		testTranslationMap('search_item_props');
     if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
     PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
-     PATHNAME.endsWith('/hobby/doll') || PATHNAME === '/' || PATHNAME.endsWith('/index/home')) {
+     PATHNAME.endsWith('/hobby/doll') || PATHNAME === '/' || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home')) {
       testTranslationMap('home_item_database_tabs');
       testTranslationMap('home_item_popular_tabs');
       testTranslationMapForDic('home_item_popular_hits', ['home_item_popular_hits']);
@@ -1366,7 +1413,7 @@ $(document).ready(function () {
 		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_plushies']);
 		} else if (PATHNAME.endsWith('/hobby/doll')) {
 		  testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_dolls']);
-		} else if (PATHNAME === '/' || PATHNAME.endsWith('/index/home')) {
+		} else if (PATHNAME === '/' || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home')) {
 			testTranslationMapForDic('home_item_info_type_name', ['home_image_type_name']);
 		}
     }
@@ -1405,16 +1452,13 @@ $(document).ready(function () {
       testTranslationMap('search_global_ibox_description');
   	}
     
-    testTranslationMap('encyclopedia_nav');
-    testTranslationMap('encyclopedia_infobox_props');
- 		testTranslationMapForDic('encyclopedia_items_section', ['encyclopedia_items_section']);
-    testTranslationMap('encyclopedia_items_more');
+	encyclopedia_section.testTranslation();
     
     if (PATHNAME.includes("/hobby/")) {
       testTranslationMap("item_prop");
       testTranslationMap('item_nav');
       testTranslationMapForDic('item_contribution_type', ['item_contribution_type']);
-    } else if (PATHNAME.includes("/user/home")) {
+    } else if (PATHNAME.includes("/user/home") || PATHNAME.includes("/index")) {
       testTranslationMap("home_action_type_filter");
       testTranslationMap("home_edit_action_type");
   		testTranslationMapForDic('home_username_info_type', ['home_username_info_type']);

@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates common text on Hpoi - anime figures database
-// @version  0.3.2
+// @version  0.3.3
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -674,8 +674,17 @@ const doTranslation = function(itemInQuestion, subDictionaries = [], methodType 
 };
 
 const doDateFormat = function(dateCn) {
-  let date = moment(dateCn, "YYYY年MM月DD日");
-  let dateEn = date.format("DD/MM/YYYY");
+	let date, dateEn;
+	if (dateCn.indexOf('日') != -1) {
+		date = moment(dateCn, "YYYY年MM月DD日");
+		dateEn = date.format("DD/MM/YYYY");
+	} else if (dateCn.indexOf('月') != -1) {
+		date = moment(dateCn, "YYYY年MM月");
+		dateEn = date.format("MM/YYYY");
+	} else if (dateCn.indexOf('年') != -1) {
+		date = moment(dateCn, "YYYY年");
+		dateEn = date.format("YYYY");
+	}
   return dateEn;
 };
 
@@ -861,7 +870,50 @@ const section = {
   
 };
 
+/* new type tile for items */
+let glyph_tile_section = Object.create(section); 
+glyph_tile_section.translations = {
+	en: {
+		'tile_properties' : {
+			'厂商：' : 'Man.: ', // manufacturer
+			'出荷：' : 'Released: ', // Release date
+			'新增：' : 'Addded: ', // Addition date
+			'价格：' : 'Price: ', // Price
+			'愿望：' : 'Wish: ', // Wished by x people
+			'浏览：' : 'Hits: ', // how many views
+			'评分：' : 'Rate: ', // overal rate
+			//collection only
+			'途径：' : 'Way: ', // channel? shop? shipment?
+			'补款：' : 'Due: ', // how many money yet to paid
+			// line only
+			'名称：' : 'Name: ',
+			'作品：' : 'Count: ',
+			'更新：' : 'Updated: ',
+		},
+	},
+};
+glyph_tile_section.places = {
+  'tile_properties' : 'ul.hpoi-glyphicons-list > li > .hpoi-detail-grid-right > .hpoi-detail-grid-info > span > em',
+};
+glyph_tile_section.translate = function() {
+    this.doTranslation('tile_properties');
+	// translate dates in
 
+	let cnDateTextElementsToTranslate = [this.translations.en['tile_properties']['出荷：'],
+			this.translations.en['tile_properties']['新增：'], this.translations.en['tile_properties']['更新：']];
+	let cnDateRows = $('.hpoi-detail-grid-info > span');
+	let cnDateTextElements = cnDateRows.contents().filter(function() {
+		if (this.nodeType === Node.TEXT_NODE) {
+			let previousSiblingText = this.previousElementSibling.innerHTML;
+			if (cnDateTextElementsToTranslate.includes(previousSiblingText)) {return true;}
+		}
+	});
+	translateFixedDate(cnDateTextElements);
+
+};
+glyph_tile_section.testTranslation = function () {
+	this.testTranslationMap('tile_properties');
+};
 
 let nav_top_section = Object.create(section);
 
@@ -990,11 +1042,19 @@ let encyclopedia_section = Object.create(section);
 encyclopedia_section.translations = {
 	en : {
 		'encyclopedia_nav' : {
+			'推送动态' : 'Push action',
 			'编辑' : 'Edit',
 		},
 		'encyclopedia_nav_submenu' : {
 			'基本资料' : 'Edit info',
 			'封面' : 'Edit cover'
+		},
+		'encyclopedia_header_type' : {
+			'角色' : 'Character',
+			'作品' : 'Series',
+			'系列' : 'Line',
+			'人物' : 'Person',
+			'厂商' : 'Company',
 		},
 		'encyclopedia_infobox_props' : {
 			'名称：' : 'Name: ',
@@ -1046,7 +1106,7 @@ encyclopedia_section.translations = {
 			'动画' : 'Video',
 			'游戏' : 'Game',
 			'其它' : 'Other',
-	},
+		},
 		'encyclopedia_items_section' : {
 			'详情': 'Info', 
 			'自营周边' : 'Sold by Hpoi',
@@ -1062,22 +1122,22 @@ encyclopedia_section.translations = {
 			'她参与的手办' : 'Figures worked on',
 			'他参与的手办' : 'Figures worked on',
 			'评论' : 'Comments'
-    },
+		},
 		'encyclopedia_items_more' : {
 			'全部' : 'more',
 		},
 	},
 };
 encyclopedia_section.places = {
-  /* ENCYCLOPEDIA */
-  'encyclopedia_nav' : '.hpoi-company-dropdown > .company-edit > a',
-  'encyclopedia_nav_submenu' : '.hpoi-company-dropdown > .company-edit > ul > li > a',
-  'encyclopedia_infobox_props' : '.company-ibox > div.row > div.item-details',
-  'encyclopedia_items_more' : '.company-ibox > .item-head a.hpoi-btn-more > span',
-  'encyclopedia_items_header_list' : '.hpoi-company-nav > div > a.nav-item',
-  'encyclopedia_items_header' : '.company-ibox > .item-head > div > h3',
-  'encyclopedia_items_header_count' : '.company-ibox > .item-head > div > span',
-  'encyclopedia_items_glyph_props' : 'ul.hpoi-glyphicons-list > li > .hpoi-detail-grid-right > .hpoi-detail-grid-info > span > em',
+	/* ENCYCLOPEDIA */
+	'encyclopedia_nav' : '.hpoi-company-dropdown a',
+	'encyclopedia_nav_submenu' : '.hpoi-company-dropdown > .company-edit > ul > li > a',
+	'encyclopedia_header_type' : '.hpoi-company-info .info-head > span:nth-of-type(1)',
+	'encyclopedia_infobox_props' : '.company-ibox > div.row > div.item-details',
+	'encyclopedia_items_more' : '.company-ibox > .item-head a.hpoi-btn-more > span',
+	'encyclopedia_items_header_list' : '.hpoi-company-nav > div > a.nav-item',
+	'encyclopedia_items_header' : '.company-ibox > .item-head > div > h3',
+	'encyclopedia_items_header_count' : '.company-ibox > .item-head > div > span',
 };
 encyclopedia_section.isToTranslate = function () {
 	const PATHNAME = window.location.pathname;
@@ -1126,7 +1186,9 @@ encyclopedia_section.translate = function() {
 	if (me.isToTranslate()) {
 		me.doTranslation('encyclopedia_nav');
 		me.doTranslation('encyclopedia_nav_submenu');
+		me.doTranslation('encyclopedia_header_type');
 		me.doTranslation('encyclopedia_items_header_list', ['encyclopedia_items_section']);
+		$(me.places['encyclopedia_items_header_list']).css('margin-left', '20px');
 		me.doTranslation('encyclopedia_items_header', ['encyclopedia_items_section']);
 		me.doTranslation('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
 		me.doTranslation('encyclopedia_items_more');
@@ -1134,7 +1196,7 @@ encyclopedia_section.translate = function() {
 		$(me.places['encyclopedia_items_header_count']).each(function(index, element) {
 			me.translateEncyclopediaItemsHeader(element, me.translations['en']['encyclopedia_items_section']);
 		});
-		me.doTranslation('encyclopedia_items_glyph_props', [TRANSLATIONS.en['search_item_props']])
+		glyph_tile_section.translate();
 	}
 
 };
@@ -1142,10 +1204,12 @@ encyclopedia_section.testTranslation = function () {
 	if ( this.isToTranslate()) {
 		this.testTranslationMap('encyclopedia_nav');
 		this.testTranslationMap('encyclopedia_nav_submenu');
+		this.testTranslationMap('encyclopedia_header_type');
 		this.testTranslationMapForDic('encyclopedia_items_header_list', ['encyclopedia_items_section']);
 		this.testTranslationMapForDic('encyclopedia_items_header', ['encyclopedia_items_section']);
 		this.testTranslationMapForDic('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
 		this.testTranslationMap('encyclopedia_items_more');
+		glyph_tile_section.testTranslation();
 	}
 };
 

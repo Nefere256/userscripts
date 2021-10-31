@@ -131,6 +131,7 @@ const TRANSLATIONS = {
       '洗涤：' : 'Washing:',
       '尺寸：': 'Size:',
       '版权：' : 'Copyrights:',
+			'版权标记：' : 'Copyrights:',
 			'原型协力：' : 'Producer:',
       '官网：' : 'Website:',
       '官方链接：' : 'Off. links:' ,
@@ -897,8 +898,7 @@ glyph_tile_section.places = {
 };
 glyph_tile_section.translate = function() {
     this.doTranslation('tile_properties');
-	// translate dates in
-
+	// translate release dates
 	let cnDateTextElementsToTranslate = [this.translations.en['tile_properties']['出荷：'],
 			this.translations.en['tile_properties']['新增：'], this.translations.en['tile_properties']['更新：']];
 	let cnDateRows = $('.hpoi-detail-grid-info > span');
@@ -1008,7 +1008,7 @@ let nav_top_section = Object.create(section);
 nav_top_section.translate = function() {
     this.doTranslation('nav_top_left_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu']);
     this.doTranslation('nav_top_left_submenu');
-    $('.hpoi-garagekit-box').css('width', '178px').css('margin-left', '-86px');
+    $('.hpoi-garagekit-box').css('width', '178px');
     this.doTranslation('nav_top_right_menu');
     this.doTranslation('nav_top_right_get_app');
     this.doTranslation('nav_top_right_get_app_submenu', ['nav_top_get_app_submenu']);

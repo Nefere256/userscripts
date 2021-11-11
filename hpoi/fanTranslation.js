@@ -30,36 +30,14 @@
 		// 'word' : 'translation', }
 		en: {
 			'profile_stats': {
-				'关注': 'attention',
+				'关注': 'followed',
 				'粉丝': 'followers',
-				'赞!': 'thanks!'
+				'赞!': 'praise'
 			},
 			'profile_desc': {
 				'还没有信仰_(:з」∠)_': 'not much to say _(:з」∠)_',
 			},
 			/* HOME PAGE - FEEDS */
-			'home_action_type_filter': {
-				'全部': 'All',
-				'情报': 'Info',
-				'相册': 'Albums',
-				'用户': 'Users',
-				'条目': 'Entries',
-			},
-			'home_action_type_sub_filter': {
-				'全部': 'All',
-				/*info only*/
-				'制作': 'New items',
-				'更图': 'New pics',
-				'开订': 'Preorders',
-				'延期': 'Delays',
-				'出荷': 'Released',
-				'再版': 'Re-releases',
-				/* album only */
-				'关注': 'Followed',
-				/* entries only */
-				'全部条目': 'All',
-				'关注条目': 'Followed',
-			},
 			'home_username_info_type': {
 				'制作决定': 'New item announced',
 				'官图更新': 'Official pictures update',
@@ -69,13 +47,6 @@
 				'出荷时间': 'Release time',
 				'再版确定': 'Re-release confirmed',
 				'情报更新': 'Info updated',
-			},
-			'home_edit_action_type': {
-				'传图': 'Uploaded pics',
-				'评论': 'Comment',
-				'出售': 'Sale',
-				'收购': 'Hunt', /* actually it's buying*/
-				'情报': 'Info',
 			},
 			'home_image_type_name': {
 				'手办': 'Figure',
@@ -89,24 +60,6 @@
 				'作品': 'Series',
 				'角色': 'Character',
 			},
-			/* ITEM HOME PAGE */
-			'home_item_database_tabs': {
-				'最新入库': 'Recently added',
-				'热门预定': 'Most ordered',
-				'热门出荷': 'Close release',
-			},
-			'home_item_popular_tabs': {
-				'每日热门': 'Best today',
-				'每周热门': 'Best this week',
-				'好评top': 'Best',
-			},
-			'home_item_popular_hits': {
-				'浏览': 'Hits',
-			},
-			'home_item_amazon_buy': {
-				'捡!': 'Buy!',
-			},
-
 			/* ITEM PAGE */
 			'item_prop': {
 				'名称：': 'Name:',
@@ -160,13 +113,6 @@
 				'更新发售/版本': 'Updated release/version',
 			},
 			'hpoi_box_title': {
-				/* main page */
-				'大家在看': 'Everyone\'s watching',
-				'资料库': 'Database',
-				'最新相册': 'Recent albums',
-				'日亚捡漏': 'Amazon jp pick up',
-				'最新情报': 'Latest information',
-				'热门推荐': 'Popular recommendations',
 				/* items page*/
 				'官图·情报': 'Official information',
 				'关联商品': 'Related products',
@@ -177,10 +123,6 @@
 				'贡献用户': 'Contributors',
 				'热门评论': 'Top comments',
 				'最新评论': 'Recent comments',
-				/* user main page*/
-				'待补款': 'Waiting to pay',
-				'商品推荐': 'Featured products',
-				'红人榜': 'Top contributors', /*lit. red people list */
 			},
 			'more_button': {
 				'更多': 'more',
@@ -189,27 +131,8 @@
 				'写简评': 'new review',
 				'添加': 'add'
 			},
-			'home-page-searchbox': { /* 请输入关键/条目ID/JAN码等 如: GSC 路人女主 */
-				'placeholder': 'Please enter the keyword / entry ID / JAN code etc. like: POP UP PARADE',
-			},
 			'search-searchbox': { /*在结果中查找*/
 				'placeholder': 'Search within the results'
-			},
-			'search_item_props': {
-				'厂商': 'Man', // manufacturer
-				'出荷': 'Rele.', // Release date
-				'新增': 'Add.', // Addition date
-				'价格': 'Price', // Price
-				'愿望': 'Wish', // Wished by x people
-				'浏览': 'Hits', // how many views
-				'评分': 'Rate', // overal rate
-				//collection only
-				'途径': 'Way', // channel? shop? shipment?
-				'补款': 'Due', // how many money yet to paid
-				// line only
-				'名称': 'Name',
-				'作品': 'Count',
-				'更新': 'Upd.',
 			},
 
 			/*  SETTINGS */
@@ -346,7 +269,9 @@
 				'真实模型': 'Real models',
 				'毛绒布偶': 'Plushies',
 				'Doll娃娃': 'Dolls',
-				'GK/DIY模型': 'Garage kits/models'
+				'doll娃娃': 'Dolls',
+				'GK/DIY模型': 'Garage kits/models',
+				'GK/其他': 'Garage kits/other'
 			},
 			'x_subtypes_figures': {
 				'比例人形': 'Scale figure',
@@ -412,26 +337,12 @@
 
 	const PLACES = {
 		/* OTHER */
+		'logged_in_indicator': '.hpoi-navpersonal',
 		'hpoi_box_title': 'div.hpoi-box-title > .hpoi-title-left span',
 		'profile_stats': '.user-box-content > .row > div',
 		'profile_desc': '.user-box-content-detail > small',
-		/* HOME PAGE */
-		'home_action_type_filter': 'div.user-home div.action-type ul.action-type-nav > li > a',
-		'home_action_type_sub_filter': 'div.user-home div.action-type ul.action-sub-nav > li > a',
-		'home_edit_action_type': '.home-info .home-info-content span.type-action',
-		'home_username_info_type': 'div.home-info > .row > .home-info-content div:not(.has-user) > .user-name',
-		'home_image_type_name': '.home-info .type-name',
 		/* HOME ITEM PAGE */
 		'home_item_props': 'div.hpoi-database-content > div > div.hpoi-dataBase-item > div > div.hpoi-database-text > div > span:nth-of-type(1)',
-		'home_item_database_tabs': '#database-newAdd, #database-hotOrder, #database-release',
-		'home_item_popular_tabs': 'div.hpoi-databas-popular > div > div > div.database-select > a',
-		'home_item_popular_hits': 'div.hpoi-populartext-box',
-		'home_item_amazon_buy': 'div.hpoi-nichiapick > div.hpoi-nichiapick-box > div > div.hpoi-nichiapick-item > div.hpoi-nichiapick-content > div.hpoi-nichiapick-text > a.hpoi-nichia-pick',
-		'home_item_info_sub_filter': 'div.hpoi-latestinformation-left > div.hpoi-box-title > div.hpoi-title-left > a',
-		'home_item_info_action_type': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(2) > span',
-		'home_item_info_type_long': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(1) > span:nth-of-type(1)',
-		'home_item_info_time': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(1) > span:nth-of-type(2)',
-		'home_item_info_type_name': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.left-leioan > span',
 		/* SETTINGS */
 		'settings_list': '.list-group > .list-group-item',
 		'settings_panel_title': '.panel > .panel-heading',
@@ -456,7 +367,6 @@
 		'item_nav': '.navbar-header > ul.navbar-nav > li > a',
 		'more_button': '.hpoi-btn-border > span',
 		'rating_label': '.rating-bar-chart > .graphFieldrating_barchart > .graphLabelrating_barchart',
-		'home-page-searchbox': '.home-search-text',
 		'search-searchbox': '#realPage-keyword',
 	};
 
@@ -715,6 +625,51 @@
 		},
 
 	};
+	/* new type tile for items */
+	let glyph_tile_old_section = Object.create(section);
+	glyph_tile_old_section.translations = {
+		en: {
+			'tile_properties': {
+				'厂商': 'Man', // manufacturer
+				'出荷': 'Rele.', // Release date
+				'新增': 'Add.', // Addition date
+				'价格': 'Price', // Price
+				'愿望': 'Wish', // Wished by x people
+				'浏览': 'Hits', // how many views
+				'评分': 'Rate', // overal rate
+				//collection only
+				'途径': 'Way', // channel? shop? shipment?
+				'补款': 'Due', // how many money yet to paid
+				// line only
+				'名称': 'Name',
+				'作品': 'Count',
+				'更新': 'Upd.',
+			},
+		},
+	};
+	glyph_tile_old_section.places = {
+		'tile_properties': '.hpoi-database-text > div > span:nth-child(1)',
+		'tile_values' : '.hpoi-database-text > div > span:nth-child(2)',
+	};
+	glyph_tile_old_section.translate = function () {
+		const me = this;
+		me.doTranslation('tile_properties');
+		// translate release dates
+		let tilePropertiesDic = me.translations.en['tile_properties'];
+		let cnDateTextElementsToTranslate = [tilePropertiesDic['出荷'], tilePropertiesDic['新增'], tilePropertiesDic['更新']];
+		let cnTileValues = $(me.places['tile_values']);
+		let cnDateTextElements = cnTileValues.filter(function () {
+				let previousSiblingText = this.previousElementSibling.innerHTML;
+				if (cnDateTextElementsToTranslate.includes(previousSiblingText)) {
+					return true;
+				}
+			});
+		translateFixedDate(cnDateTextElements);
+
+	};
+	glyph_tile_old_section.testTranslation = function () {
+		this.testTranslationMap('tile_properties');
+	};
 
 	/* new type tile for items */
 	let glyph_tile_section = Object.create(section);
@@ -880,6 +835,364 @@
 		this.testTranslationMapForDic('nav_top_narrow_screen_get_app', ['nav_top_right_get_app']);
 		this.testTranslationMapForDic('nav_top_narrow_screen_get_app_submenu', ['nav_top_get_app_submenu']);
 		this.testTranslationMapForDic('nav_top_narrow_screen_submenu', ['nav_top_personal', 'nav_top_left_submenu', 'nav_top_right_submenu']);
+	};
+
+	let home_user_section = Object.create(section);
+	home_user_section.translations = {
+		en: {
+			'home_activity_type_filter': {
+				'全部': 'All',
+				'情报': 'Info',
+				'相册': 'Albums',
+				'用户': 'Users',
+				'条目': 'Entries',
+			},
+			'home_activity_type_filter_action_type': {
+				'发布相册': 'Add album',
+				'分类订阅': 'Filter feed',
+				'报错/报缺/催更': 'Report',
+				'设置屏蔽动态': 'Block settings',
+			},
+			'home_activity_type_filter_info': {
+				'全部': 'All',
+				'制作': 'New items',
+				'更图': 'New pics',
+				'开订': 'Preorders',
+				'延期': 'Delays',
+				'出荷': 'Released',
+				'再版': 'Re-releases',
+			},
+			'home_activity_type_filter_user': {
+				'全部': 'All',
+				'关注': 'Followed',
+			},
+			'home_activity_type_filter_entry': {
+				'全部条目': 'All',
+				'关注条目': 'Followed',
+			},
+			'home_activity_type_filter_by_item_type_header': {
+				'分类：': 'Filter by: ',
+			},
+			'home_activity_type_filter_by_item_type_save': {
+				'保存': 'Save',
+			},
+			'home_activity_card_action_type': {
+				'传图': 'Uploaded pics',
+				'评论': 'Comment',
+				'出售': 'Sale',
+				'收购': 'Hunt', /* actually it's buying*/
+				'情报': 'Info',
+			},
+			'home_side_header' : {
+				'待补款': 'Waiting to pay',
+				'商品推荐': 'Featured products',
+			},
+			'home_side_praise_header': {
+				'点赞每周有奖': 'Win prizes every week',
+			},
+			'home_side_praise_periods': {
+				'今日': 'Today',
+				'一周': 'Week',
+				'一月': 'Month',
+			},
+			'home_side_figures': {
+				'周边期待榜': 'Most ordered',
+				'近期发售': 'Released soon'
+			},
+			'home_side_reccomendations': {
+				'热门推荐': 'Let\'s check',
+			},
+
+			'home-page-searchbox': { /* 请输入关键/条目ID/JAN码等 如: GSC 路人女主 */
+				'placeholder': 'Please enter the keyword / entry ID / JAN code etc. like: POP UP PARADE',
+			},
+		},
+	};
+	home_user_section.places = {
+		'home-page-searchbox': '.hpoi-search-text',
+		'profile_stats': '.user-box-content > .text-center > .row > div',
+		'profile_desc': '.user-box-content-detail > small',
+		'home_activity_type_filter': 'div.user-home div.action-type ul.action-type-nav > li > a',
+		'home_activity_type_filter_active': 'div.user-home div.action-type ul.action-type-nav > li > a.active',
+		'home_activity_type_filter_sub': 'div.user-home div.action-type ul.action-sub-nav > li > a',
+		'home_activity_type_filter_action_type': '.action-type-nav > li > div.hpoi-action-more > ul.hpoi-menu-box > li > a',
+		'home_activity_type_filter_by_item_type_header' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up > span',
+		'home_activity_type_filter_by_item_type_types' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up > div > label > span',
+		'home_activity_type_filter_by_item_type_save' : '#hpoi-classification-conter > div > button',
+
+		'home_activity_card_action_type': '.home-info .home-info-content span.type-action',
+		'home_activity_card_info_type': 'div.home-info > .row > .home-info-content div:not(.has-user) > .user-name',
+		'home_activity_card_type_name': '.home-info .type-name',
+
+		'home_side_header': '.home-left > div > .hpoi-box-title > .hpoi-title-left > span',
+		'home_side_praise_header': '.home-left > div.top-praise > .hpoi-home-praise-head > .hpoi-ranking-neon',
+		'home_side_praise_periods': '.home-left > div.top-praise > .hpoi-home-praise-head > .item-head-more > a',
+		'home_side_figures': '.home-right >  .hpoi-home-box-rt > .hpoi-hobby-tabs > a',
+		'home_side_reccomendations': '.home-right > .hpoi-home-box-rt > .hpoi-box-title > .hpoi-title-left > span',
+	};
+	home_user_section.isToTranslate = function () {
+		const me = this;
+		const PATHNAME = window.location.pathname;
+		const loggedInIndicator = $(PLACES['logged_in_indicator']).length;
+		if (['/', '/index', '/index/home', '/user/home'].includes(PATHNAME) && loggedInIndicator > 0) {
+			return true;
+		}
+		return false;
+	};
+	home_user_section.typeFilterToDicMap = {
+		'Info': 'home_activity_type_filter_info',
+		'Users': 'home_activity_type_filter_user',
+		'Entries': 'home_activity_type_filter_entry',
+	};
+	home_user_section.translate = function () {
+		const me = this;
+		if (!me.isToTranslate()) {
+			return;
+		}
+		var searchboxes = $(me.places['home-page-searchbox']);
+		for (const searchbox of searchboxes) {
+			searchbox.attributes['placeholder'].textContent =
+				me.translations.en['home-page-searchbox']['placeholder'];
+		}
+
+		me.doTranslation('profile_stats', [TRANSLATIONS.en['profile_stats']]);
+		me.doTranslation('profile_desc', [TRANSLATIONS.en['profile_desc']]);
+
+		me.doTranslation('home_activity_type_filter');
+		me.doTranslation('home_activity_type_filter_action_type');
+
+		let activitySectionType = $(me.places['home_activity_type_filter_active'])[0].text;
+		let typeFilterDic = me.typeFilterToDicMap[activitySectionType];
+		if (typeFilterDic != null) {
+			me.doTranslation('home_activity_type_filter_sub', [typeFilterDic]);
+		}
+
+		me.doTranslation('home_activity_type_filter_by_item_type_header');
+		$(me.places['home_activity_type_filter_by_item_type_header']).css('font-size', '12px');
+		me.doTranslation('home_activity_type_filter_by_item_type_types', [TRANSLATIONS.en['x_item_types_plural']]);
+		me.doTranslation('home_activity_type_filter_by_item_type_save');
+
+		me.doTranslation('home_activity_card_action_type');
+		$(PLACES['home_activity_card_action_type']).prev().css('width', '');
+		me.doTranslation('home_activity_card_info_type',[TRANSLATIONS.en['home_username_info_type']]);
+		me.doTranslation('home_activity_card_type_name',[TRANSLATIONS.en['home_image_type_name']]);
+		$('.home-box-comment > div > .has-user > .user-name > span:nth-child(1)').css('width', '');
+		$('.home-box-comment > div > .has-user > .user-sign > span:nth-child(1)').css('width', '70%');
+		let relativeTimes = $('span.type-time');
+		translateRelativeDate(relativeTimes);
+
+		me.doTranslation('home_side_header');
+		me.doTranslation('home_side_praise_header');
+		me.doTranslation('home_side_praise_periods');
+		me.doTranslation('home_side_figures');
+		me.doTranslation('home_side_reccomendations');
+	};
+	home_user_section.testTranslation = function () {
+		const me = this;
+		if (!me.isToTranslate()) {
+			return;
+		}
+		me.testTranslationMapForDic('profile_stats', [TRANSLATIONS.en['profile_stats']]);
+		me.testTranslationMapForDic('profile_desc', [TRANSLATIONS.en['profile_desc']]);
+		me.testTranslationMap('home_activity_type_filter');
+		me.testTranslationMap('home_activity_type_filter_action_type');
+
+		let activitySectionType = $(me.places['home_activity_type_filter_active'])[0].text;
+		let typeFilterDic = me.typeFilterToDicMap[activitySectionType];
+		if (typeFilterDic != null) {
+			me.testTranslationMapForDic('home_activity_type_filter_sub', [typeFilterDic]);
+		}
+
+		me.testTranslationMap('home_activity_type_filter_by_item_type_header');
+		me.testTranslationMapForDic('home_activity_type_filter_by_item_type_types', [TRANSLATIONS.en['x_item_types_plural']]);
+		me.testTranslationMap('home_activity_type_filter_by_item_type_save');
+
+		me.testTranslationMap('home_activity_card_action_type');
+		me.testTranslationMapForDic('home_activity_card_info_type',[TRANSLATIONS.en['home_username_info_type']]);
+		me.testTranslationMapForDic('home_activity_card_type_name',[TRANSLATIONS.en['home_image_type_name']]);
+
+		me.testTranslationMap('home_side_header');
+		me.testTranslationMap('home_side_praise_header');
+		me.testTranslationMap('home_side_praise_periods');
+		me.testTranslationMap('home_side_figures');
+		me.testTranslationMap('home_side_reccomendations');
+		// TODO test for search placeholders
+	};
+
+	let home_item_section = Object.create(section);
+	home_item_section.translations = {
+		'en': {
+			'home-page-searchbox': { /* 请输入关键/条目ID/JAN码等 如: GSC 路人女主 */
+				'placeholder': 'Please enter the keyword / entry ID / JAN code etc. like: POP UP PARADE',
+			},
+			'home_item_title_section': {
+				'大家在看': 'Everyone\'s watching',
+				'资料库': 'Database',
+				'最新相册': 'Recent albums',
+				'日亚捡漏': 'Amazon jp pick up',
+			},
+			'home_item_database_tabs': {
+				'最新入库': 'Recently added',
+				'热门预定': 'Most ordered',
+				'热门出荷': 'Close release',
+			},
+			'home_item_popular_tabs': {
+				'每日热门': 'Best today',
+				'每周热门': 'Best this week',
+				'好评top': 'Best',
+			},
+			'home_item_popular_hits': {
+				'浏览': 'Hits',
+			},
+			'home_item_amazon_buy': {
+				'捡!': 'Buy!',
+			},
+			'home_item_latest_information_title' : {
+				'最新情报': 'Latest information',
+			},
+			'home_item_info_sub_filter': {
+				'全部': 'All',
+				'制作': 'New items',
+				'更图': 'New pics',
+				'开订': 'Preorders',
+				'延期': 'Delays',
+				'出荷': 'Released',
+				'再版': 'Re-releases',
+			},
+			'home_item_info_action_type': {
+				'情报': 'Info',
+			},
+			'home_item_info_type_long': {
+				'制作决定': 'New item announced',
+				'官图更新': 'Official pictures update',
+				'预订时间': 'Preorders opened',
+				'预定时间': 'Preorders opened',
+				'出荷延期': 'Release postponed',
+				'出荷时间': 'Release time',
+				'再版确定': 'Re-release confirmed',
+				'情报更新': 'Info updated',
+			},
+			'home_item_recommended_title': {
+				'热门推荐': 'Let\'s check',
+			}
+		}
+	};
+	home_item_section.places = {
+		'home-page-searchbox': '.hpoi-search-text',
+		'home_item_main_title_section': '.hpoi-loucen > .hpoi-box-title > .hpoi-title-left > span',
+		'home_item_main_gk_maker_stat': '.hpoi-fansFabulous > span',
+		'home_item_title_section': 'div.hpoi-box-title > .hpoi-title-left span',
+		'home_item_database_tabs': '#database-newAdd, #database-hotOrder, #database-release',
+		'home_item_popular_tabs': 'div.hpoi-databas-popular > div > div > div.database-select > a',
+		'home_item_popular_hits': 'div.hpoi-populartext-box',
+		'home_item_amazon_buy': 'div.hpoi-nichiapick > div.hpoi-nichiapick-box > div > div.hpoi-nichiapick-item > div.hpoi-nichiapick-content > div.hpoi-nichiapick-text > a.hpoi-nichia-pick',
+		'home_item_latest_information_title': '.hpoi-latestinformation-left > .hpoi-box-title > .hpoi-title-left > span',
+		'home_item_info_sub_filter': 'div.hpoi-latestinformation-left > div.hpoi-box-title > div.hpoi-title-left > a',
+		'home_item_info_action_type': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(2) > span',
+		'home_item_info_type_long': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(1) > span:nth-of-type(1)',
+		'home_item_info_time': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.right-leioan > div:nth-of-type(1) > span:nth-of-type(2)',
+		'home_item_info_type_name': 'div.hpoi-latestinformation-left > div.hpoi-conter-ltsifrato > div.hpoi-conter-left > div.left-leioan > span',
+		
+		'home_item_recommended_title': '.hpoi-latestinformation-right > .hpoi-box-title > .hpoi-title-left > span',
+	};
+	home_item_section.getPageType = function() {
+		const PATHNAME = window.location.pathname;
+		const loggedInIndicator = $(PLACES['logged_in_indicator']).length;
+		if (['/', '/index', '/index/home'].includes(PATHNAME) && loggedInIndicator == 0)
+			return 'main';
+		else if (PATHNAME.endsWith('/hobby/'))
+			return 'figures';
+		else if (PATHNAME.endsWith('/hobby/model'))
+			return 'anime models';
+		else if (PATHNAME.endsWith('/hobby/real'))
+			return 'real models';
+		else if (PATHNAME.endsWith('/hobby/moppet'))
+			return 'plushies';
+		else if (PATHNAME.endsWith('/hobby/doll'))
+			return 'dolls';
+		return;
+	};
+	home_item_section.isToTranslate = function() {
+		return !!this.getPageType();
+	};
+	home_item_section.translate = function() {
+		const me = this;
+		if (!me.isToTranslate()) {
+			return;
+		}
+
+		const pageType = me.getPageType();
+		if (pageType == 'main') {
+			var searchboxes = $(me.places['home-page-searchbox']);
+			for (const searchbox of searchboxes) {
+				searchbox.attributes['placeholder'].textContent =
+					me.translations.en['home-page-searchbox']['placeholder'];
+			}
+			me.doTranslation('home_item_main_title_section', [TRANSLATIONS.en['x_item_types_plural']]);
+			me.doTranslation('home_item_main_gk_maker_stat', [TRANSLATIONS.en['profile_stats']]);
+		} else {
+			me.doTranslation('home_item_title_section');
+			me.doTranslation('home_item_database_tabs');
+			glyph_tile_old_section.translate();
+			me.doTranslation('home_item_popular_tabs');
+			me.doTranslation('home_item_popular_hits', ['home_item_popular_hits']);
+			me.doTranslation('home_item_amazon_buy');
+
+		}
+		me.doTranslation('home_item_latest_information_title');
+		$(me.places['home_item_latest_information_title']).css('width', '100px');
+		
+		me.doTranslation('home_item_info_sub_filter');
+		me.doTranslation('home_item_info_action_type');
+		me.doTranslation('home_item_info_type_long');
+		let relativeTimes = $(me.places['home_item_info_time']);
+		translateRelativeDate(relativeTimes);
+
+		const pageTypeToDicMap = {
+			'main': 'home_image_type_name',
+			'figures': 'x_subtypes_figures',
+			'anime models': 'x_subtypes_anime_models',
+			'real models': 'x_subtypes_real_models',
+			'plushies': 'x_subtypes_plushies',
+			'dolls': 'x_subtypes_dolls',
+		};
+		me.doTranslation('home_item_info_type_name', [TRANSLATIONS.en[pageTypeToDicMap[pageType]]]);
+
+		me.doTranslation('home_item_recommended_title');
+	};
+	home_item_section.testTranslation = function() {
+		const me = this;
+		if (!me.isToTranslate()) {
+			return;
+		}
+		const pageType = me.getPageType();
+		if (pageType == 'main') {
+			me.testTranslationMapForDic('home_item_main_title_section', TRANSLATIONS.en['x_item_types_plural']);
+			me.testTranslationMapForDic('home_item_main_gk_maker_stat', [TRANSLATIONS.en['profile_stats']]);
+		} else {
+			me.testTranslationMap('home_item_title_section');
+			me.testTranslationMap('home_item_database_tabs');
+			glyph_tile_old_section.testTranslation();
+			me.testTranslationMap('home_item_popular_tabs');
+			me.testTranslationMapForDic('home_item_popular_hits', ['home_item_popular_hits']);
+			me.testTranslationMap('home_item_amazon_buy');
+		}
+		me.testTranslationMap('home_item_latest_information_title');
+		
+		me.testTranslationMap('home_item_info_sub_filter');
+		me.testTranslationMap('home_item_info_action_type');
+		me.testTranslationMap('home_item_info_type_long');
+
+		const pageTypeToDicMap = {
+			'main': 'home_image_type_name',
+			'figures': 'x_subtypes_figures',
+			'anime models': 'x_subtypes_anime_models',
+			'real models': 'x_subtypes_real_models',
+			'plushies': 'x_subtypes_plushies',
+			'dolls': 'x_subtypes_dolls',
+		};
+		me.testTranslationMapForDic('home_item_info_type_name', [TRANSLATIONS.en[pageTypeToDicMap[pageType]]]);
+		me.testTranslationMap('home_item_recommended_title');
 	};
 
 	let search_section = Object.create(section);
@@ -1280,6 +1593,7 @@
 				'作品': 'Series',
 				'系列': 'Line',
 				'人物': 'Person',
+				'原画': 'Designer',
 				'厂商': 'Company',
 			},
 			'encyclopedia_infobox_props': {
@@ -1320,6 +1634,8 @@
 				'稀有度：': 'Rarity: ',
 				'编号：': 'Number: ',
 				'阵营：': 'Faction: ',
+				'来源：': 'Source: ',
+				'人设：': 'Character design',
 
 				'类型：': 'Type: ',
 				'时间：': 'Time: ',
@@ -1340,9 +1656,17 @@
 				'发行周边': 'Items distributed',
 				'关联周边': 'Related items',
 				'相关周边': 'Related items',
+				'参与周边': 'Items worked on',
 				'她参与的手办': 'Figures worked on',
 				'他参与的手办': 'Figures worked on',
 				'评论': 'Comments'
+			},
+			'encyclopedia_items_section_sub_made': {
+				'制作周边': 'Items manufactured',
+				'发行周边': 'Items distributed',
+			},
+			'encyclopedia_items_section_sub_issued': {
+				'发行周边': 'Items distributed',
 			},
 			'encyclopedia_items_more': {
 				'全部': 'more',
@@ -1351,13 +1675,16 @@
 	};
 	encyclopedia_section.places = {
 		/* ENCYCLOPEDIA */
-		'encyclopedia_nav': '.hpoi-company-dropdown a',
+		'encyclopedia_nav_push': '.hpoi-company-dropdown > a',
+		'encyclopedia_nav': '.hpoi-company-dropdown > div.dropdown > a',
 		'encyclopedia_nav_submenu': '.hpoi-company-dropdown > .company-edit > ul > li > a',
 		'encyclopedia_header_type': '.hpoi-company-info .info-head > span:nth-of-type(1)',
 		'encyclopedia_infobox_props': '.company-ibox > div.row > div.item-details',
 		'encyclopedia_items_more': '.company-ibox > .item-head a.hpoi-btn-more > span',
 		'encyclopedia_items_header_list': '.hpoi-company-nav > div > a.nav-item',
 		'encyclopedia_items_header': '.company-ibox > .item-head > div > h3',
+		'encyclopedia_items_header_sub_made': '.company-ibox > .item-head > div.hpoi-slider-active > a.hpoi-slider-make',
+		'encyclopedia_items_header_sub_issued': '.company-ibox > .item-head > div.hpoi-slider-active > a.hpoi-slider-issued',
 		'encyclopedia_items_header_count': '.company-ibox > .item-head > div > span',
 	};
 	encyclopedia_section.isToTranslate = function () {
@@ -1376,15 +1703,24 @@
 	共3723个	=> Total 153 (items)
 	共91个相关周边	=> Total 91 related items
 	共29个相关手办	=> Total 29 related figures
+	共1个, 评分4.38	=> Total 153 (items), Rating 4.38
 
 	1st part > up to counter like  个, 条
 	2nd part > after counter, translate according to dictionary
+	3rd part > after a coma, change coma to normal coma and translate with dictionary
 	 */
 	encyclopedia_section.translateEncyclopediaItemsHeader = function (element, dicDef) {
 		let textToTranslate = element.textContent.trim();
 		let translation = "";
-		// let counterSymbol = ['个', '条'];
-		let partsSplittedByCounters = textToTranslate.split(/[个条]+/);
+		
+		// split at parts
+		let counterSymbol = ['个', '条'];
+		let partsSplittedByCounters = textToTranslate.split(new RegExp('['+ counterSymbol.join('') + ']', 'i'));
+		if (partsSplittedByCounters[1].indexOf(',') !== -1) {
+			secondAndThirdPart = partsSplittedByCounters[1].split(',');
+			partsSplittedByCounters[1] = secondAndThirdPart;
+			partsSplittedByCounters = partsSplittedByCounters.flat();
+		}
 
 		let numberPart = partsSplittedByCounters[0];
 		let number = numberPart.substring(1);
@@ -1392,12 +1728,21 @@
 		translation += number;
 
 		let secondPartTranslation = "";
-		let secondPartExists = partsSplittedByCounters.length == 2;
+		let secondPartExists = partsSplittedByCounters.length >= 2;
 		if (secondPartExists && partsSplittedByCounters[1].length > 0) {
 			secondPartTranslation = (dicDef[partsSplittedByCounters[1]]).toLowerCase();
 
 			translation += " ";
 			translation += secondPartTranslation;
+		}
+
+		let thirdPartTranslation = "";
+		let thirdPartExists = partsSplittedByCounters.length == 3;
+		if (thirdPartExists && partsSplittedByCounters[2].length > 0) {
+			thirdPartTranslation = partsSplittedByCounters[2].replace('评分', 'rate: ');
+
+			translation += ', ';
+			translation += thirdPartTranslation;
 		}
 		element.textContent = translation;
 	};
@@ -1405,12 +1750,15 @@
 	encyclopedia_section.translate = function () {
 		const me = this;
 		if (me.isToTranslate()) {
+			me.doTranslation('encyclopedia_nav_push', ['encyclopedia_nav']);
 			me.doTranslation('encyclopedia_nav');
 			me.doTranslation('encyclopedia_nav_submenu');
 			me.doTranslation('encyclopedia_header_type', ['encyclopedia_entry_type']);
 			me.doTranslation('encyclopedia_items_header_list', ['encyclopedia_items_section']);
 			$(me.places['encyclopedia_items_header_list']).css('margin-left', '20px');
 			me.doTranslation('encyclopedia_items_header', ['encyclopedia_items_section']);
+			me.doTranslation('encyclopedia_items_header_sub_made', ['encyclopedia_items_section_sub_made']);
+			me.doTranslation('encyclopedia_items_header_sub_issued', ['encyclopedia_items_section_sub_issued']);
 			me.doTranslation('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
 			me.doTranslation('encyclopedia_items_more');
 
@@ -1423,11 +1771,14 @@
 	};
 	encyclopedia_section.testTranslation = function () {
 		if (this.isToTranslate()) {
+			this.testTranslationMapForDic('encyclopedia_nav_push', ['encyclopedia_nav']);
 			this.testTranslationMap('encyclopedia_nav');
 			this.testTranslationMap('encyclopedia_nav_submenu');
 			this.testTranslationMapForDic('encyclopedia_header_type', ['encyclopedia_entry_type']);
 			this.testTranslationMapForDic('encyclopedia_items_header_list', ['encyclopedia_items_section']);
 			this.testTranslationMapForDic('encyclopedia_items_header', ['encyclopedia_items_section']);
+			this.testTranslationMapForDic('encyclopedia_items_header_sub_made', ['encyclopedia_items_section_sub_made']);
+			this.testTranslationMapForDic('encyclopedia_items_header_sub_issued', ['encyclopedia_items_section_sub_issued']);
 			this.testTranslationMapForDic('encyclopedia_infobox_props', ['encyclopedia_infobox_props']);
 			this.testTranslationMap('encyclopedia_items_more');
 			glyph_tile_section.testTranslation();
@@ -1439,52 +1790,11 @@
 		const PATHNAME = window.location.pathname;
 
 		nav_top_section.translate();
-		//3 pages in one
-		doTranslation('hpoi_box_title', ['hpoi_box_title', 'x_item_types_plural']);
+		home_user_section.translate();
+		home_item_section.translate();
 
-		if (PATHNAME.includes('/user/home') || PATHNAME.includes('/index') || PATHNAME == '/') {
-			doTranslation('profile_stats');
-			doTranslation('profile_desc');
-			doTranslation('home_action_type_filter');
-			doTranslation('home_action_type_sub_filter');
-			doTranslation('home_edit_action_type');
-			$(PLACES['home_edit_action_type']).prev().css('width', '60%');
-			doTranslation('home_username_info_type');
-			doTranslation('home_image_type_name');
-
-			let relativeTimes = $('span.type-time');
-			translateRelativeDate(relativeTimes);
-		}
-		if (PATHNAME === '/' || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home') || PATHNAME.endsWith('/hobby/')
-			 || PATHNAME.endsWith('/hobby/model') || PATHNAME.endsWith('/hobby/real')
-			 || PATHNAME.endsWith('/hobby/moppet') || PATHNAME.endsWith('/hobby/doll')) {
-			doTranslation(null, ['search_item_props'], 'dic_first', $(PLACES['home_item_props']));
-			doTranslation('home_item_database_tabs');
-			doTranslation('home_item_popular_tabs');
-			doTranslation('home_item_popular_hits', ['home_item_popular_hits']);
-			doTranslation('home_item_amazon_buy');
-			doTranslation('home_item_info_sub_filter', ['home_action_type_sub_filter']);
-			doTranslation('home_item_info_action_type', ['home_edit_action_type']);
-			doTranslation('home_item_info_type_long', ['home_username_info_type']);
-			let relativeTimes = $(PLACES['home_item_info_time']);
-			translateRelativeDate(relativeTimes);
-
-			if (PATHNAME.endsWith('/hobby/')) {
-				doTranslation('home_item_info_type_name', ['x_subtypes_figures']);
-			} else if (PATHNAME.endsWith('/hobby/model')) {
-				doTranslation('home_item_info_type_name', ['x_subtypes_anime_models']);
-			} else if (PATHNAME.endsWith('/hobby/real')) {
-				doTranslation('home_item_info_type_name', ['x_subtypes_real_models']);
-			} else if (PATHNAME.endsWith('/hobby/moppet')) {
-				doTranslation('home_item_info_type_name', ['x_subtypes_plushies']);
-			} else if (PATHNAME.endsWith('/hobby/doll')) {
-				doTranslation('home_item_info_type_name', ['x_subtypes_dolls']);
-			} else if (PATHNAME === '/' || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home')) {
-				doTranslation('home_item_info_type_name', ['home_image_type_name']);
-			}
-
-		}
-		if (PATHNAME.includes("/hobby/")) {
+		if (PATHNAME.includes("/hobby/") && !home_item_section.isToTranslate()) {
+			doTranslation('hpoi_box_title', ['hpoi_box_title', 'x_item_types_plural']);
 			doTranslation('item_prop');
 			doTranslation('item_nav');
 			doTranslation('item_contribution_type', ['item_contribution_type']);
@@ -1492,7 +1802,6 @@
 		}
 		doTranslation('rating_label');
 		doTranslation('more_button');
-		doTranslation('search_item_props');
 
 		search_section.translate();
 		global_search_section.translate();
@@ -1534,11 +1843,6 @@
 		translateFixedDate(datesTextesReleaseDate);
 
 		//translate home search placeholder
-		var searchboxes = $(PLACES['home-page-searchbox']);
-		for (const searchbox of searchboxes) {
-			searchbox.attributes['placeholder'].textContent =
-				TRANSLATIONS.en['home-page-searchbox']['placeholder'];
-		}
 		var searchboxes2 = $(PLACES['search-searchbox']);
 		for (const searchbox of searchboxes2) {
 			searchbox.attributes['placeholder'].textContent =
@@ -1553,52 +1857,16 @@
 			expect(TRANSLATIONS.en).toExist("English is somehow empty!");
 
 			nav_top_section.testTranslation();
-			if (!PATHNAME.endsWith('/hobby/all')) {
-				testTranslationMapForDic('hpoi_box_title', ['hpoi_box_title', 'x_item_types_plural']);
-				testTranslationMap('search_item_props');
-			}
-			if (PATHNAME.endsWith('/hobby/') || PATHNAME.endsWith('/hobby/model') ||
-				PATHNAME.endsWith('/hobby/real') || PATHNAME.endsWith('/hobby/moppet') ||
-				PATHNAME.endsWith('/hobby/doll') || PATHNAME === '/' || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home')) {
-				testTranslationMap('home_item_database_tabs');
-				testTranslationMap('home_item_popular_tabs');
-				testTranslationMapForDic('home_item_popular_hits', ['home_item_popular_hits']);
-				testTranslationMap('home_item_amazon_buy');
-				testTranslationMapForDic('home_item_info_sub_filter', ['home_action_type_sub_filter']);
-				testTranslationMapForDic('home_item_info_action_type', ['home_edit_action_type']);
-				testTranslationMapForDic('home_item_info_type_long', ['home_username_info_type']);
-
-				if (PATHNAME.endsWith('/hobby/')) {
-					testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_figures']);
-				} else if (PATHNAME.endsWith('/hobby/model')) {
-					testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_anime_models']);
-				} else if (PATHNAME.endsWith('/hobby/real')) {
-					testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_real_models']);
-				} else if (PATHNAME.endsWith('/hobby/moppet')) {
-					testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_plushies']);
-				} else if (PATHNAME.endsWith('/hobby/doll')) {
-					testTranslationMapForDic('home_item_info_type_name', ['x_subtypes_dolls']);
-				} else if (PATHNAME === '/' || PATHNAME.endsWith('/index') || PATHNAME.endsWith('/user/home')) {
-					testTranslationMapForDic('home_item_info_type_name', ['home_image_type_name']);
-				}
-			}
-
+			home_user_section.testTranslation();
 			search_section.testTranslation();
 			global_search_section.testTranslation();
 			encyclopedia_section.testTranslation();
 
-			if (PATHNAME.includes("/hobby/")) {
+			if (PATHNAME.includes("/hobby/") && !home_item_section.isToTranslate()) {
+				testTranslationMapForDic('hpoi_box_title', ['hpoi_box_title', 'x_item_types_plural']);
 				testTranslationMap("item_prop");
 				testTranslationMap('item_nav');
 				testTranslationMapForDic('item_contribution_type', ['item_contribution_type']);
-			} else if (PATHNAME.includes("/user/home") || PATHNAME.includes("/index")) {
-				testTranslationMap("home_action_type_filter");
-				testTranslationMap("home_edit_action_type");
-				testTranslationMapForDic('home_username_info_type', ['home_username_info_type']);
-				testTranslationMap('home_image_type_name');
-				testTranslationMap('settings_general_form');
-
-				// TODO test for search placeholders
 			} else if (PATHNAME.includes('/user/edit/')) {
 				testTranslationMap('settings_list');
 				testTranslationMapForDic('settings_panel_title', ['settings_list']);

@@ -448,8 +448,19 @@
 		},
 
 	};
-	/* new type tile for items */
+
 	let glyph_tile_old_section = Object.create(section);
+	let glyph_tile_section = Object.create(section);
+	let nav_top_section = Object.create(section);
+	let home_user_section = Object.create(section);
+	let home_item_section = Object.create(section);
+	let settings_section = Object.create(section);
+	let global_search_section = Object.create(section);
+	let encyclopedia_section = Object.create(section);
+	let item_section = Object.create(section);
+	let search_section = Object.create(section);
+
+	/* new type tile for items */
 	glyph_tile_old_section.translations = {
 		en: {
 			'tile_properties': {
@@ -495,7 +506,6 @@
 	};
 
 	/* new type tile for items */
-	let glyph_tile_section = Object.create(section);
 	glyph_tile_section.translations = {
 		en: {
 			'tile_properties': {
@@ -540,7 +550,6 @@
 		this.testTranslationMap('tile_properties');
 	};
 
-	let nav_top_section = Object.create(section);
 	nav_top_section.translations = {
 		en: {
 			'nav_top_left_menu': {
@@ -564,6 +573,7 @@
 				'发布': 'Publish'
 			},
 			'nav_top_right_menu': {
+				'讨论板': 'Forum',
 				'360°照片': '360° pics',
 				'厂商': 'Makers',
 				'小黑屋': 'Reports',
@@ -596,6 +606,7 @@
 				'返现申请': 'Cashback',
 				'好友': 'Friends',
 				'消息': 'Messages',
+				'私信': 'Messages',
 				'账号设置': 'Settings',
 				'退出': 'Logout',
 			},
@@ -686,7 +697,6 @@
 		this.testTranslationMap('nav_top_notification_read');
 	};
 
-	let home_user_section = Object.create(section);
 	home_user_section.translations = {
 		en: {
 			'home_activity_type_filter': {
@@ -875,7 +885,6 @@
 		// TODO test for search placeholders
 	};
 
-	let home_item_section = Object.create(section);
 	home_item_section.translations = {
 		'en': {
 			'home-page-searchbox': { /* 请输入关键/条目ID/JAN码等 如: GSC 路人女主 */
@@ -1066,7 +1075,6 @@
 		me.testTranslationMap('home_item_recommended_title');
 	};
 
-	let search_section = Object.create(section);
 	search_section.translations = {
 		en: {
 			'search_condition_title': {
@@ -1260,7 +1268,6 @@
 		me.testTranslationMap('search_modal_window_footer');
 	};
 
-	let global_search_section = Object.create(section);
 	global_search_section.translations = {
 		en: {
 			'search_global_advanced_search_button': {
@@ -1448,7 +1455,6 @@
 		// me.testTranslationMap('search_global_ibox_description');
 	};
 
-	let encyclopedia_section = Object.create(section);
 	encyclopedia_section.translations = {
 		en: {
 			'encyclopedia_nav': {
@@ -1654,7 +1660,6 @@
 		}
 	};
 
-	let item_section = Object.create(section);
 	item_section.translations = {
 		en: {
 			'item_nav': {
@@ -1808,7 +1813,7 @@
 		'item_collection_sale': '.hpoi-item-box p',
 		'rating_label': '.rating-bar-chart > .graphFieldrating_barchart > .graphLabelrating_barchart',
 		'item_section_title': 'div.hpoi-box-title > .hpoi-title-left span',
-		'item_process_title': '.process-title',
+		'item_process_title': '.process-title > span',
 		'item_process_up': '.items-process > .item-time > span:nth-of-type(1):not(:empty)',
 		'item_process_time': '.items-process > .item-time > span:nth-of-type(2):not(:empty)',
 		'item_process_down': '.items-process > .item-detail:not(:empty)',
@@ -1817,7 +1822,8 @@
 	};
 	item_section.isToTranslate = function() {
 		const PATHNAME = window.location.pathname;
-		if (PATHNAME.includes("/hobby/") && !home_item_section.isToTranslate()) {
+		if (PATHNAME.includes("/hobby/") && !home_item_section.isToTranslate()
+			&& !search_section.isToTranslate()) {
 			return true;
 		}
 		return false;
@@ -1834,18 +1840,64 @@
 		me.doTranslation('item_related_title');
 		me.doTranslation('item_related_item');
 		me.doTranslation('item_properties', ['item_properties']);
+		let itemPropertiesNameList = $(this.places['item_properties']);
+		for (const itemPropertiesName of itemPropertiesNameList) {
+				itemPropertiesName.innerHTML = itemPropertiesName.innerHTML.replace('：',':');
+		};
+		
+		let itemAttributesTitle = $('.hpoi-infoList-item > span:contains("Attributes")');
+		let itemAttributesList = itemAttributesTitle.parent().find('a');
+		for (const attributeLink of itemAttributesList) {
+			let attributeHrefSearchParams = new URL(window.location.origin + '/' + attributeLink.getAttribute('href')).searchParams;
+
 			//item_properties_attributes
 			//for every link check attributes
-			//contains sex parameter - settings_general_form_gender (search one has different words)
-			// contains r18 parameter - search_condition_rating_list
-			// contains specs - search_condition_attribute_list
-			// the rest - x_subtypes map, like with search, based on category 
+			if (attributeHrefSearchParams.get('sex') != null) {
+				//contains sex parameter - settings_general_form_gender (search one has different words)
+				attributeLink.innerHTML = (settings_section.translations.en['settings_general_form_gender'][attributeLink.innerHTML])
+					.toLowerCase();
+			} else if (attributeHrefSearchParams.get('r18') != null) {
+				// contains r18 parameter - search_condition_rating_list
+				attributeLink.innerHTML = (search_section.translations.en['search_condition_rating_list'][attributeLink.innerHTML])
+					.toLowerCase();
+			} else if (attributeHrefSearchParams.get('specs') != null) {
+				// contains specs - search_condition_attribute_list
+				attributeLink.innerHTML = (search_section.translations.en['search_condition_attribute_list'][attributeLink.innerHTML])
+					.toLowerCase();
+			} else {
+				// the rest - x_subtypes map, like with search, based on category 
+				let categoryId = attributeHrefSearchParams.get('category');
 
+				const typeToTypeDic = function (categoryId) {
+					if (categoryId <= 100)
+						return 'x_subtypes_figures';
+					if (categoryId <= 200)
+						return 'x_subtypes_anime_models';
+					if (categoryId <= 300)
+						return 'x_subtypes_dolls';
+					if (categoryId <= 400)
+						return 'x_subtypes_plushies';
+					if (categoryId <= 500)
+						return 'x_subtypes_real_models';
+					if (categoryId <= 900)
+						return 'x_subtypes_merch';
+				};
+				attributeLink.innerHTML = (TRANSLATIONS.en[typeToTypeDic(categoryId)][attributeLink.innerHTML])
+					.toLowerCase();
+			}
+
+		};
 		//TODO price
 			// 15,800日元 （908元）
 			// 6,800日元 （含税，391元）
 		// TODO version
 			// 2021/7/28 , ￥15,800
+
+		let itemPropertiesValueList = $('.hpoi-infoList-item > p');
+		for (const itemPropertiesValue of itemPropertiesValueList) {
+				itemPropertiesValue.innerHTML = itemPropertiesValue.innerHTML.replaceAll('、 ',', ');
+				itemPropertiesValue.innerHTML = itemPropertiesValue.innerHTML.replaceAll('、',', ');
+		};
 
 		me.doTranslation('item_collection_top', ['item_collection_top']);
 		me.doTranslation('item_collection_status');
@@ -1903,7 +1955,6 @@
 		me.testTranslationMapForDic('item_properties_table', ['item_properties']);
 	};
 
-	let settings_section = Object.create(section);
 	settings_section.translations = {
 		en: {
 			'settings_list': {

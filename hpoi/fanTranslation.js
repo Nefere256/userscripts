@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates common text on Hpoi - anime figures database
-// @version  0.3.6
+// @version  0.4
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -1672,6 +1672,10 @@
 				'举报': 'Review',
 			},
 			'item_nav_list': {
+				'屏蔽本条目': 'Block this entry',
+				'报错/催更': 'Report/remind',
+				'举报': 'Review',
+				/* -unused? - */
 				'实物相册': 'User album',
 				'基本资料': 'General info',
 				'封面': 'Picture',
@@ -1798,7 +1802,7 @@
 	};
 	item_section.places = {
 		'item_nav': '.navbar-header > ul.navbar-nav > li > a',
-		'item_nav_list': '.nav > .dropdown > ul >  li > a',
+		'item_nav_list': '.nav > .dropdown > ul > li > a',
 		'item_nav_push': '#addfav',
 		'item_chinese_name': '.hpoi-ibox-title > p',
 		'item_related_title': '.hpoi-relation-text',
@@ -1947,7 +1951,8 @@
 		me.testTranslationMapForDic('item_chinese_name', ['item_chinese_name']);
 		me.testTranslationMapForDic('item_properties', ['item_properties']);
 		me.testTranslationMapForDic('item_collection_top', ['item_collection_top']);
-		me.testTranslationMap('item_collection_status');
+		/* TODO: think about delayed testing */
+		// me.testTranslationMap('item_collection_status');
 		me.testTranslationMap('item_collection_rate');
 		me.testTranslationMap('item_section_title');
 		me.testTranslationMap('item_process_title');
@@ -1988,6 +1993,7 @@
 				'男': 'Male',
 				'女': 'Female',
 				'保密': 'Secret',
+				'无性别': 'Genderless'
 			},
 			'settings_block_form': {
 				'NSFW内容:': 'NSFW content:',

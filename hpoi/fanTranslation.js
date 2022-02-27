@@ -1109,7 +1109,6 @@
 				'露出+': 'Explicit+', //20
 				'低于轻微露出': 'Ecchi and below', //115
 			},
-			},
 			'search_condition_filter': {
 				'添加': 'add',
 			},

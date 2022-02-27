@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates common text on Hpoi - anime figures database
-// @version  0.4
+// @version  0.4.1
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @require  https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js
@@ -1101,10 +1101,14 @@
 				'未上色': 'Uncolored',
 			},
 			'search_condition_rating_list': {
-				'全年龄': 'General',
-				'轻微露出': 'Ecchi',
-				'一般露出': 'Revealing',
-				'低于轻微露出': 'Ecchi and below',
+				'全年龄': 'General', //0
+				'轻微露出': 'Ecchi', //12
+				'一般露出': 'Revealing', //15
+				'普通露出': 'Revealing', //15
+				'露出-': 'Explicit-', //18
+				'露出+': 'Explicit+', //20
+				'低于轻微露出': 'Ecchi and below', //115
+			},
 			},
 			'search_condition_filter': {
 				'添加': 'add',

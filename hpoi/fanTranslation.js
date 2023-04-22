@@ -622,6 +622,22 @@
 			'nav_top_search_drop_list_default': {
 				'全部周边': 'All',
 			},
+			'nav_top_register_bubble_text': {
+				'登录后你可以：': 'With an account, you\'re able to:',
+				'免费看高清大图': 'view high quality photos', 
+				'发表简评/评论': 'post comments and reviews',
+				'多端同步收藏': 'manage your collection',
+				'周边情报看不停': 'keep track of new merch',
+			},
+			'nav_top_register_bubble_button': {
+				'登录': 'Sign in',
+			},
+			'nav_top_register_bubble_first_time': {
+				'首次使用？': 'First time? ',
+			},
+			'nav_top_register_bubble_register': {
+				'点击注册': 'Sign up',
+			},
 			'nav_top_notifications': {
 				'系统消息': 'System info',
 				'回复我的': 'New replies',
@@ -649,6 +665,10 @@
 		'nav_top_personal': 'ul.hpoi-navpersonal > li > a',
 		'nav_top_search_drop_list': '.nav-conters-right .dropdown-menu > li > a',
 		'nav_top_search_drop_list_default': '#searchItemTypeText',
+		'nav_top_register_bubble_text': '.hpoi-nav-user-login > p, .hpoi-nav-user-login > .content > div',
+		'nav_top_register_bubble_button': '.nav-login-btn',
+		'nav_top_register_bubble_first_time': '.nav-register-box',
+		'nav_top_register_bubble_register': '.nav-register-box > a',
 		'nav_top_narrow_screen_menu': '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a:not(.hpoi-icon-phonebox)',
 		'nav_top_narrow_screen_get_app': '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a.hpoi-icon-phonebox > span',
 		'nav_top_narrow_screen_get_app_submenu': '.nav-conters-s > .hpoi-nav-boxs > .nav-boxs-item > a.hpoi-icon-phonebox + ul > li > a > div',
@@ -668,6 +688,10 @@
 		this.doTranslation("nav_top_personal");
 		this.doTranslation('nav_top_search_drop_list', ['nav_top_search_drop_list', TRANSLATIONS.en['x_item_types']]);
 		this.doTranslation('nav_top_search_drop_list_default');
+		this.doTranslation('nav_top_register_bubble_text');
+		this.doTranslation('nav_top_register_bubble_button');
+		this.doTranslation('nav_top_register_bubble_first_time');
+		this.doTranslation('nav_top_register_bubble_register');
 		this.doTranslation('nav_top_narrow_screen_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu', 'nav_top_right_menu']);
 		this.doTranslation('nav_top_narrow_screen_get_app', ['nav_top_right_get_app']);
 		this.doTranslation('nav_top_narrow_screen_get_app_submenu', ['nav_top_get_app_submenu']);
@@ -688,6 +712,10 @@
 		this.testTranslationMap("nav_top_personal");
 		this.testTranslationMapForDic('nav_top_search_drop_list', ['nav_top_search_drop_list', TRANSLATIONS.en['x_item_types']]);
 		this.testTranslationMap('nav_top_search_drop_list_default');
+		this.testTranslationMap('nav_top_register_bubble_text');
+		this.testTranslationMap('nav_top_register_bubble_button');
+		this.testTranslationMapForDic('nav_top_register_bubble_first_time', ['nav_top_register_bubble_first_time']);
+		this.testTranslationMap('nav_top_register_bubble_register');
 		this.testTranslationMapForDic('nav_top_narrow_screen_menu', [TRANSLATIONS.en['x_item_types_plural'], 'nav_top_left_menu', 'nav_top_right_menu']);
 		this.testTranslationMapForDic('nav_top_narrow_screen_get_app', ['nav_top_right_get_app']);
 		this.testTranslationMapForDic('nav_top_narrow_screen_get_app_submenu', ['nav_top_get_app_submenu']);

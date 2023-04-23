@@ -33,7 +33,9 @@
 			'profile_stats': {
 				'关注': 'followed',
 				'粉丝': 'followers',
-				'赞!': 'likes'
+				'赞!': 'likes',
+				'获赞 ': 'likes',/* additional space for GK makers in home page*/
+				'获赞': 'likes'
 			},
 			'profile_desc': {
 				'还没有信仰_(:з」∠)_': 'not much to say _(:з」∠)_',
@@ -128,8 +130,8 @@
 				'特摄怪兽': 'Tokusatsu monster',
 				'特摄配件': 'Tokusatsu accessory',
 				'扭蛋/玩具': 'Gacha/toy',
-				'驱动模型(四驱车)': 'Vechicle (4 wheels)',
-				'驱动模型配件': 'Vechicle accessory',
+				'驱动模型-四驱车': 'Vehicle (4 wheels)',
+				'驱动模型-配件': 'Vehicle accessory',
 				'其它': 'Other',
 			},
 			'x_subtypes_real_models': {
@@ -579,7 +581,7 @@
 				'厂商': 'Makers',
 				'小黑屋': 'Reports',
 				'商城': 'Mall',
-				'消息': 'Messages',
+				'消息': 'Notifications',
 				'登录': 'Login',
 			},
 			'nav_top_right_get_app': {
@@ -733,7 +735,7 @@
 				'情报': 'Info',
 				'相册': 'Albums',
 				'用户': 'Users',
-				'条目': 'Entries',
+				'条目': 'Entries'
 			},
 			'home_activity_type_filter_action_type': {
 				'发布相册': 'Add album',
@@ -758,8 +760,23 @@
 				'全部条目': 'All',
 				'关注条目': 'Followed',
 			},
-			'home_activity_type_filter_by_item_type_header': {
-				'分类：': 'Filter by: ',
+			'home_activity_type_filter_by_header': {
+				'包含分类：': 'Filter by category: ',
+				'屏蔽动态：': 'Block action: ',
+				'包含内容：': 'Filter by type: '
+			},
+			'home_activity_type_filter_by_action': {
+				'情报': 'Info',
+				'评论': 'Comment',
+				'图片上传': 'Uploaded pics',
+				'出售': 'Sale',
+				'收购': 'Hunt', /* actually it's buying*/
+			},
+			'home_activity_type_filter_by_content': {
+				'条目': 'Entries',
+				'相册': 'Albums',
+				'文章': 'Articles',
+				'图片': 'Pictures'
 			},
 			'home_activity_type_filter_by_item_type_save': {
 				'保存': 'Save',
@@ -776,7 +793,7 @@
 				'商品推荐': 'Featured products',
 			},
 			'home_side_praise_header': {
-				'点赞每周有奖': 'Win prizes every week',
+				'获赞排行榜': 'Appreciation ranking'
 			},
 			'home_side_praise_periods': {
 				'今日': 'Today',
@@ -804,8 +821,10 @@
 		'home_activity_type_filter_active': 'div.user-home div.action-type ul.action-type-nav > li > a.active',
 		'home_activity_type_filter_sub': 'div.user-home div.action-type ul.action-sub-nav > li > a',
 		'home_activity_type_filter_action_type': '.action-type-nav > li > div.hpoi-action-more > ul.hpoi-menu-box > li > a',
-		'home_activity_type_filter_by_item_type_header' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up > span',
-		'home_activity_type_filter_by_item_type_types' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up > div > label > span',
+		'home_activity_type_filter_by_header' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up > span',
+		'home_activity_type_filter_by_category' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up:nth-of-type(1) > div > label > span',
+		'home_activity_type_filter_by_action' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up:nth-of-type(2) > div > label > span',
+		'home_activity_type_filter_by_content' : '#hpoi-classification-conter > #updSettingHobby > .hpoi-classification-up:nth-of-type(3) > div > label > span',
 		'home_activity_type_filter_by_item_type_save' : '#hpoi-classification-conter > div > button',
 
 		'home_activity_card_action_type': '.home-info .home-info-content span.type-action',
@@ -855,9 +874,11 @@
 			me.doTranslation('home_activity_type_filter_sub', [typeFilterDic]);
 		}
 
-		me.doTranslation('home_activity_type_filter_by_item_type_header');
-		$(me.places['home_activity_type_filter_by_item_type_header']).css('font-size', '12px');
-		me.doTranslation('home_activity_type_filter_by_item_type_types', [TRANSLATIONS.en['x_item_types_plural']]);
+		me.doTranslation('home_activity_type_filter_by_header');
+		$(me.places['home_activity_type_filter_by_header']).css('font-size', '12px');
+		me.doTranslation('home_activity_type_filter_by_category', [TRANSLATIONS.en['x_item_types_plural']]);
+		me.doTranslation('home_activity_type_filter_by_action');
+		me.doTranslation('home_activity_type_filter_by_content');
 		me.doTranslation('home_activity_type_filter_by_item_type_save');
 
 		var translateActivityCards = function() {
@@ -898,8 +919,10 @@
 			me.testTranslationMapForDic('home_activity_type_filter_sub', [typeFilterDic]);
 		}
 
-		me.testTranslationMap('home_activity_type_filter_by_item_type_header');
-		me.testTranslationMapForDic('home_activity_type_filter_by_item_type_types', [TRANSLATIONS.en['x_item_types_plural']]);
+		me.testTranslationMap('home_activity_type_filter_by_header');
+		me.testTranslationMapForDic('home_activity_type_filter_by_category', [TRANSLATIONS.en['x_item_types_plural']]);
+		me.testTranslationMap('home_activity_type_filter_by_action');
+		me.testTranslationMap('home_activity_type_filter_by_content');
 		me.testTranslationMap('home_activity_type_filter_by_item_type_save');
 
 		me.testTranslationMap('home_activity_card_action_type');
@@ -1126,6 +1149,7 @@
 				'陆地': 'On land',
 				'航空': 'Aircraft',
 				'可脱': 'Alternate parts',
+				'展示品': 'Prototype',
 				'需拼装': 'To assembly',
 				'未上色': 'Uncolored',
 			},
@@ -1355,7 +1379,7 @@
 				'厂商': 'Company',
 			},
 			'search_global_results_none': {
-				'什么也没找到, 可以尝试按"相关度最高"排序看看': 'Couldn\'t find anything, try to sort by \'Most revelant\'.',
+				'什么也没找到~': 'Couldn\'t find anything~',
 			},
 			'search_global_page_ibox': {
 				'说明': 'How to use',
@@ -1383,7 +1407,7 @@
 		'search_global_option_album_sort': '.search-option-nav:nth-of-type(4) > div',
 		'search_global_result_tags': '#result-content > .media-list .ibox-content > .media-body > div > span.label-tag',
 		'search_global_users_stats': '#result-content .user-i-box .row > div',
-		'search_global_results_none': 'div#result-content > div:not(.pull-right)',
+		'search_global_results_none': 'div#result-content > div:not(.pull-right) > div.hpoi-no-content > p',
 		'search_global_albums_none': '#waterfall > div',
 		'search_global_page_ibox': '.container > .row .ibox > .ibox-title > h5',
 		'search_global_ibox_description': '.container > .row .ibox:first > .ibox-content *',
@@ -1443,8 +1467,7 @@
 			me.doTranslation('search_global_result_tags', [TRANSLATIONS.en['x_series_types']]);
 		else if (searchCategoryCode == '1000002') // users
 			me.doTranslation('search_global_users_stats', [TRANSLATIONS.en['profile_stats']]);
-
-		if (searchCategoryCode == '60001')
+		else if (searchCategoryCode == '60001') // albums
 			me.doTranslation('search_global_albums_none', ['search_global_results_none']);
 		else
 			me.doTranslation('search_global_results_none');
@@ -1489,14 +1512,6 @@
 
 	encyclopedia_section.translations = {
 		en: {
-			'encyclopedia_nav': {
-				'推送动态': 'Push action',
-				'编辑': 'Edit',
-			},
-			'encyclopedia_nav_submenu': {
-				'基本资料': 'Edit info',
-				'封面': 'Edit cover'
-			},
 			'encyclopedia_entry_type': {
 				'角色': 'Character',
 				'作品': 'Series',
@@ -1504,6 +1519,9 @@
 				'人物': 'Person',
 				'原画': 'Designer',
 				'厂商': 'Company',
+			},
+			'encyclopedia_name_header': {
+				'中文名：': 'Chinese name: '
 			},
 			'encyclopedia_infobox_props': {
 				'名称：': 'Name: ',
@@ -1584,10 +1602,8 @@
 	};
 	encyclopedia_section.places = {
 		/* ENCYCLOPEDIA */
-		'encyclopedia_nav_push': '.hpoi-company-dropdown > a',
-		'encyclopedia_nav': '.hpoi-company-dropdown > div.dropdown > a',
-		'encyclopedia_nav_submenu': '.hpoi-company-dropdown > .company-edit > ul > li > a',
 		'encyclopedia_header_type': '.hpoi-company-info .info-head > span:nth-of-type(1)',
+		'encyclopedia_name_header': '.hpoi-company-info .info-head > span:nth-of-type(2)',
 		'encyclopedia_infobox_props': '.company-ibox > div.row > div.item-details',
 		'encyclopedia_items_more': '.company-ibox > .item-head a.hpoi-btn-more > span',
 		'encyclopedia_items_header_list': '.hpoi-company-nav > div > a.nav-item',
@@ -1657,10 +1673,8 @@
 	encyclopedia_section.translate = function () {
 		const me = this;
 		if (me.isToTranslate()) {
-			me.doTranslation('encyclopedia_nav_push', ['encyclopedia_nav']);
-			me.doTranslation('encyclopedia_nav');
-			me.doTranslation('encyclopedia_nav_submenu');
 			me.doTranslation('encyclopedia_header_type', ['encyclopedia_entry_type']);
+			me.doTranslation('encyclopedia_name_header', ['encyclopedia_name_header']);
 			me.doTranslation('encyclopedia_items_header_list', ['encyclopedia_items_section']);
 			$(me.places['encyclopedia_items_header_list']).css('margin-left', '20px');
 			me.doTranslation('encyclopedia_items_header', ['encyclopedia_items_section']);
@@ -1678,9 +1692,6 @@
 	};
 	encyclopedia_section.testTranslation = function () {
 		if (this.isToTranslate()) {
-			this.testTranslationMapForDic('encyclopedia_nav_push', ['encyclopedia_nav']);
-			this.testTranslationMap('encyclopedia_nav');
-			this.testTranslationMap('encyclopedia_nav_submenu');
 			this.testTranslationMapForDic('encyclopedia_header_type', ['encyclopedia_entry_type']);
 			this.testTranslationMapForDic('encyclopedia_items_header_list', ['encyclopedia_items_section']);
 			this.testTranslationMapForDic('encyclopedia_items_header', ['encyclopedia_items_section']);
@@ -2051,6 +2062,8 @@
 				'收藏内容': 'Favorites',
 				'收藏统计': 'Collection stats',
 				'其他内容': 'Other',
+				'关注、粉丝': 'Followed, followers',
+				'讨论板个人主页': 'Forum profile'
 			},
 			'settings_privacy_form': {
 				'手办、动漫模型、真实模型、毛绒布偶、Doll娃娃': 'figures, dolls, plushies etc',
@@ -2150,7 +2163,7 @@
 		'settings_block_form_radio': '#updSetting > .form-group > div > label.radio-inline',
 		'settings_privacy_headers': '#updSetting > .form-group > div.row > h4',
 		'settings_privacy_form': '#updSetting > .form-group > div.row > span',
-		'settings_privacy_form_radio': '#updSetting > .form-group > div > div.privacySetting-option  > label.radio-inline',
+		'settings_privacy_form_radio': '#updSetting > .form-group > div > div > label.radio-inline',
 
 		'settings_notification_header': '#updSetting > div.form-group > label',
 		'settings_notification_radio': '#updSetting div.push-text',

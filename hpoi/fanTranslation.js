@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates common text on Hpoi - anime figures database
-// @version  0.4.1
+// @version  0.4.2
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @include  https://www.hpoi.net.cn/*

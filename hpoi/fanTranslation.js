@@ -11,6 +11,7 @@
 // @require  https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js
 // @require  https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/zh-cn.min.js
 // @require  https://cdnjs.cloudflare.com/ajax/libs/expect/1.10.0/expect.min.js
+// @license	 MIT
 // @grant    none
 // ==/UserScript==
 

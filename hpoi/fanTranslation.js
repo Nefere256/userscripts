@@ -382,7 +382,7 @@
 			const me = this;
 			expect(me.places[submapToCheck]).toExist("jquery for [" + submapToCheck + "] should exists.");
 			expect($(me.places[submapToCheck])).toExist("items found via query for [" + submapToCheck + "] should exist.");
-			$(me.places[submapToCheck]).forEach((e, i) => {
+			$(me.places[submapToCheck]).each(function (i, e) {
 				expect(Object.values(me.translations.en[submapToCheck]).find(translation => translation.includes(e.textContent.trim())))
 				.toBeTruthy("No translation provided for [" + e.textContent + "] in [" + submapToCheck + "] map!");
 			});

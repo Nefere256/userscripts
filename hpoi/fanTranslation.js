@@ -202,16 +202,30 @@
 			methodType = 'dic_first';
 		}
 		let items;
-		if (!elementsInQuestion)
-			items = $(PLACES[itemInQuestion]);
-		else
-			items = elementsInQuestion;
-
-		let textItems = items.contents().filter(function () {
-				return this.nodeType === Node.TEXT_NODE;
+		let childItems = [];
+		if (!elementsInQuestion) {
+			items = document.querySelectorAll(PLACES[itemInQuestion]);
+			childItems = []; 
+			items.forEach((itemList) => { 
+				Array.from(itemList.childNodes).forEach((childItemList) => {
+					childItems.push(childItemList)
+				})
 			});
+		}
+		else {
+			items = elementsInQuestion;
+			items.forEach((itemList) => { 
+				itemList.forEach((childItemList) => {
+					childItems.push(childItemList)
+				})
+			});
+		}
 
-		textItems.each(function (i, e) {
+		let textItems = childItems.filter(item =>
+				item.nodeType == Node.TEXT_NODE
+		);
+
+		textItems.forEach((e, i) => {
 			if (methodType == 'item_first') {
 				let bad = e.textContent.trim();
 				let translation = TRANSLATIONS.en[itemInQuestion][bad];
@@ -300,50 +314,6 @@
 		});
 	};
 
-	/* ==== TESTS ===== */
-
-	const testTranslationMap = function (submapToCheck) {
-		expect(PLACES[submapToCheck]).toExist("jquery for [" + submapToCheck + "] should exists.");
-		expect($(PLACES[submapToCheck])).toExist("items found via jquery for [" + submapToCheck + "] should exist.");
-		$(PLACES[submapToCheck]).each(function (i, e) {
-			expect(Object.values(TRANSLATIONS.en[submapToCheck]).find(translation => translation.includes(e.textContent.trim())))
-			.toBeTruthy("No translation provided for [" + e.textContent + "] in [" + submapToCheck + "] map!");
-		});
-	};
-
-	const testTranslationMapForDic = function (placeToCheck, dictionaries) {
-		expect(PLACES[placeToCheck]).toExist("jquery for [" + placeToCheck + "] should exists.");
-		expect($(PLACES[placeToCheck])).toExist("items found via jquery for [" + placeToCheck + "] should exist.");
-
-		$(PLACES[placeToCheck]).each(function (i, e) {
-			let translationIsDone = 0;
-			let translatedText = e.textContent.trim();
-			if (translatedText.length == 0) {
-				return; /*continue*/
-			}
-			for (const subDictionary of dictionaries) {
-				let subDictionaryEntries = [];
-				if ($.type(subDictionary) === "string") {
-					subDictionaryEntries = Object.entries(TRANSLATIONS.en[subDictionary]);
-				} else {
-					subDictionaryEntries = subDictionary;
-				}
-
-				for (const subDictionaryEntry of subDictionaryEntries) { /*[0] key [1] value*/
-					translationIsDone = translatedText.includes(subDictionaryEntry[1]);
-					if (translationIsDone) {
-						break;
-					}
-				}
-				if (translationIsDone) {
-					break;
-				}
-			}
-			expect(translationIsDone).toBeTruthy(
-				"No translation provided for [" + translatedText + "] in [" + dictionaries.join() + "] maps!");
-		});
-
-	};
 
 	/* SECTIONS */
 
@@ -411,8 +381,8 @@
 		testTranslationMap(submapToCheck) {
 			const me = this;
 			expect(me.places[submapToCheck]).toExist("jquery for [" + submapToCheck + "] should exists.");
-			expect($(me.places[submapToCheck])).toExist("items found via jquery for [" + submapToCheck + "] should exist.");
-			$(me.places[submapToCheck]).each(function (i, e) {
+			expect($(me.places[submapToCheck])).toExist("items found via query for [" + submapToCheck + "] should exist.");
+			$(me.places[submapToCheck]).forEach((e, i) => {
 				expect(Object.values(me.translations.en[submapToCheck]).find(translation => translation.includes(e.textContent.trim())))
 				.toBeTruthy("No translation provided for [" + e.textContent + "] in [" + submapToCheck + "] map!");
 			});
@@ -420,10 +390,10 @@
 
 		testTranslationMapForDic(placeToCheck, dictionaries) {
 			const me = this;
-			expect(me.places[placeToCheck]).toExist("jquery for [" + placeToCheck + "] should exists.");
-			expect($(me.places[placeToCheck])).toExist("items found via jquery for [" + placeToCheck + "] should exist.");
+			expect(me.places[placeToCheck]).toExist("query for [" + placeToCheck + "] should exists.");
+			expect($(me.places[placeToCheck])).toExist("items found via query for [" + placeToCheck + "] should exist.");
 
-			$(me.places[placeToCheck]).each(function (i, e) {
+			$(me.places[placeToCheck]).each(function(i, e) {
 				let translationIsDone = 0;
 				let translatedText = e.textContent.trim();
 				if (translatedText.length == 0) {

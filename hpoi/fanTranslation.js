@@ -3,7 +3,7 @@
 // @namespace https://takkkane.tumblr.com/scripts/hpoiTranslation
 // @supportURL     https://twitter.com/TaxDelusion
 // @description A script that translates common text on Hpoi - anime figures database
-// @version  0.4.2
+// @version  0.4.3
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/hpoi/fanTranslation.js
 // @include  https://www.hpoi.net/*
 // @include  https://www.hpoi.net.cn/*
@@ -458,6 +458,7 @@
 	let nav_top_section = Object.create(section);
 	let home_user_section = Object.create(section);
 	let home_item_section = Object.create(section);
+	let login_form_section = Object.create(section);
 	let settings_section = Object.create(section);
 	let global_search_section = Object.create(section);
 	let encyclopedia_section = Object.create(section);
@@ -1126,6 +1127,145 @@
 		};
 		me.testTranslationMapForDic('home_item_info_type_name', [TRANSLATIONS.en[pageTypeToDicMap[pageType]]]);
 		me.testTranslationMap('home_item_recommended_title');
+	};
+
+	login_form_section.translations = {
+		en: {
+			'login_form_title': {
+				'登录到Hpoi': 'Log in to Hpoi',
+			},
+			'login_qr_code_title': {
+				'扫码登录': 'Scan code to log in',
+			},
+			'login_qr_code_hint': {
+				'请使用Hpoi APP 扫码登录或扫码下载APP': 'Scan the code to log in via Hpoi APP or download the app',
+			},
+			'login_tab': {
+				'密码登录': 'with password',
+				'短信登录': 'with SMS'
+			},
+			'login_form_placeholder': {
+				'输入手机号/邮箱':'Phone number/email',
+				'密码':'Password',
+				'请输入图形验证码':'Put code from the image',
+				'手机号码':'Phone number',
+				'请输入短信验证码':'Put code from the text message',
+			},
+			'login_form_verify_code_button': {
+				'获取验证码': 'Send SMS'
+			},
+			'login_form_register_button': {
+				'注册': 'Register'
+			},
+			'login_form_login_button': {
+				'登录': 'Log in'
+			},
+			'login_form_forgot_link': {
+				'忘记密码': 'Forgot the password?'
+			},
+			'login_form_email_error' : {
+				'请输入邮箱地址或手机号码' : 'Email/phone number cannot be empty',
+				'请输入密码' : 'Password cannot be empty',
+				'请输入验证码': 'Verification code cannot be empty',
+				'账号或密码错误' : 'Invalid email/phone number and/or password'
+			},
+			'login_form_phone_error': {
+				'请输入手机号': 'Phone number cannot be empty',
+				'请输图形入验证码': 'Code from the image cannot be empty',
+				'请输入短信验证码' : 'Code from SMS cannot be empty',
+				'请输入验证码' : 'Verification code cannot be empty',
+				'验证码错误' : 'Invalid verification code',
+				'账号或验证码错误': 'Invalid phone number and/or verification code(s)',
+			},
+			'login_form_alert' : {
+				'请关联手机号' : ''
+			},
+			'login_form_agreements': {
+				'登录或完成注册即代表你同意': 'By registering or log in, you agree to following terms: ',
+				'《用户协议》': '"Terms of service"',
+				'、': ', ',
+				'《隐私协议》': '"Privacy Policy"',
+				'《发布协议》': '"Copyrights"',
+				'若此电脑非个人使用，需要在使用后退出登录': '. If you are using a public computer, please remember to log out. '
+			}
+		}
+	};
+	login_form_section.places = {
+		'login_form_title': 'div.hpoi-irrigation-banner > span',
+		'login_qr_code_container': 'div.login-container-code',
+		'login_qr_code_title': 'div.login-container-code > p.title',
+		'login_qr_code_box': 'div.login-container-code > div.qrcode-box',
+		'login_qr_code_hint': 'div.login-container-code > p.hint',
+		'login_tab': 'div.hpoi-login-box > div.login-tabs > a',
+		'login_form_placeholder': '.login-form-box > div input',
+		'login_form_verify_code_button': 'div.input-item > button.btn-code',
+		'login_form_register_button': 'div.hpoi-login-box > div.login-btn-box > a.login-reg-btn',
+		'login_form_login_button': 'div.hpoi-login-box > div.login-btn-box > button.login-btn',
+		'login_form_forgot_link': 'div.hpoi-login-box > div.login-bottom > a',
+		'login_form_agreements': 'div.hpoi-login-footer *',
+		'login_form_email_error': '#form-email-err-text',
+		'login_form_phone_error': '#form-phone-err-text',
+	};
+	login_form_section.isToTranslate = function () {
+		const me = this;
+		const PATHNAME = window.location.pathname;
+		if (['/user/login'].includes(PATHNAME)) {
+			return true;
+		}
+		return false;
+	};
+	login_form_section.translate = function () {
+		const me = this;
+		if (!me.isToTranslate()) {
+			return;
+		}
+		me.doTranslation('login_form_title');
+
+		$(me.places['login_qr_code_container']).css('width', '200px');
+		$(me.places['login_qr_code_box']).css('margin', 'auto');
+		$(me.places['login_qr_code_box']).css('width', '160px');
+		me.doTranslation('login_qr_code_title');
+		me.doTranslation('login_qr_code_hint');
+		$('.hpoi-login-line').css('margin', '0 80px 0 40px');
+		me.doTranslation('login_tab');
+		//me.doTranslation('search_condition_toogle_hide', ['search_condition_toogle']);
+
+		var formBoxes = $(me.places['login_form_placeholder']);
+		for (const formBox of formBoxes) {
+			formBox.attributes['placeholder'].textContent =
+				me.translations.en['login_form_placeholder'][formBox.attributes['placeholder'].textContent];
+		}
+		me.doTranslation('login_form_verify_code_button');
+
+		var translateEmailErrors = function() {
+			me.doTranslation('login_form_email_error');
+		};
+		me.createAndUseObserverForList(translateEmailErrors, $(me.places['login_form_email_error'])[0]);
+		var translatePhoneErrors = function() {
+			me.doTranslation('login_form_phone_error');
+		};
+		me.createAndUseObserverForList(translatePhoneErrors, $(me.places['login_form_phone_error'])[0]);
+
+		me.doTranslation('login_form_register_button');
+		me.doTranslation('login_form_login_button');
+		me.doTranslation('login_form_forgot_link');
+		me.doTranslation('login_form_agreements');
+
+	};
+	login_form_section.testTranslation = function () {
+		const me = this;
+		if (!me.isToTranslate()) {
+			return;
+		}
+		//me.testTranslationMapForDic('search_filter_main_type', [TRANSLATIONS.en['x_item_types_plural'], TRANSLATIONS.en['x_generic_all_capitalized']]);
+		me.testTranslationMap('login_form_title');
+		me.testTranslationMap('login_qr_code_title');
+		me.testTranslationMap('login_qr_code_hint');
+		me.testTranslationMap('login_tab');
+		me.testTranslationMap('login_form_register_button');
+		me.testTranslationMap('login_form_login_button');
+		me.testTranslationMap('login_form_forgot_link');
+		//me.doTranslation('login_form_agreements');
 	};
 
 	search_section.translations = {
@@ -2299,6 +2439,7 @@
 
 		doTranslation('more_button');
 
+		login_form_section.translate();
 		search_section.translate();
 		global_search_section.translate();
 		encyclopedia_section.translate();
@@ -2326,6 +2467,7 @@
 
 			nav_top_section.testTranslation();
 			home_user_section.testTranslation();
+			login_form_section.testTranslation();
 			search_section.testTranslation();
 			global_search_section.testTranslation();
 			encyclopedia_section.testTranslation();

@@ -63,9 +63,36 @@
         tagElement.textContent = countOfTags;
         itemLinkElement.appendChild(tagElement);
 	};
+
+	async function fetchAndHandle (queue) {
+		var resultQueue = [];
+		for(var itemElement of queue) {
+			var itemLinkElement = itemElement.firstChild;
+			var entryLink = itemLinkElement.getAttribute("href");
+			
+			fetch(entryLink).then(function (response) {
+				if (response.ok) {
+					return response.text();
+				}
+				return Promise.reject(response);
+			}).then(function (html) {
+				var countOfTags = getTagCounterFromHtml(html);
+				addTagCounterToSearchResult(itemLinkElement, countOfTags);
+			}).catch(function (err) {
+				if (err.status == 429) {
+					console.warn('Too many requests. Added the request to fetch later', err.url);
+					resultQueue.push(itemElement);
+					REQUEST_DELAY = REQUEST_DELAY * 1.1;
+					console.info('Increased delay to ' + REQUEST_DELAY);
+				}
+			});
+			await sleep(REQUEST_DELAY);
+			
+		}
+		return resultQueue;
+	};
 	async function main(){
 		var queue = [];
-		addStyles();
 		var entryContainers = getEntryContainers();
 		entryContainers.each(function(i, entryContainer) {
 			var itemsElements = getItemsFromContainer(entryContainer);
@@ -73,22 +100,13 @@
 				queue.push(itemElement);
 			});
 		});
-		for(var itemElement of queue) {
-			var itemLinkElement = itemElement.firstChild;
-			var entryLink = itemLinkElement.getAttribute("href");
-			
-			fetch(entryLink).then(function (response) {
-				return response.text();
-			}).then(function (html) {
-				var countOfTags = getTagCounterFromHtml(html);
-				addTagCounterToSearchResult(itemLinkElement, countOfTags);
-			}).catch(function (err) {
-				console.warn('Something went wrong.', err);
-			});
-			await sleep(REQUEST_DELAY);
-			
+
+		while (queue.length) {
+			queue = await fetchAndHandle(queue);
 		}
+
 	};
 	
+	addStyles();
 	main();
 })();

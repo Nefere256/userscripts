@@ -6,17 +6,40 @@
 // @author       Nefere
 // @match        https://myfigurecollection.net/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=myfigurecollection.net
-// @grant        none
+// @grant        GM.getValue
+// @grant        GM.setValue
 // ==/UserScript==
 
-(function() {
+(async function() {
     'use strict';
     var TAG_CLASSNAME = "us-tag";
     var FAKE_CLASS_PLACEHOLDER = "what-i-was-looking-for";
 	var REQUEST_DELAY = 1000;
+	var CACHE_FRESH_SECONDS = 10 * 60;
+	var tagCounterCache = new Map(Object.entries(
+	JSON.parse(await GM.getValue('tagCounterCache', '{}'))));
 	
 	function sleep(ms) {
 		return new Promise(resolve => setTimeout(resolve, ms));
+	};
+	function pushToTagCounterCache(url, tagCounter) {
+		if (tagCounter) {
+			var time = Date.now();
+			tagCounterCache.set(url, {'number': tagCounter, 'updatedTime': time});
+		}
+	};
+	async function getTagCounterFromTagCounterCache(url) {
+		var tagCounterPair = await tagCounterCache.get(url);
+		if (tagCounterPair == null) {
+			return 0;
+		}
+		var rottenPairDate = new Date(tagCounterPair.updatedTime);
+		rottenPairDate.setSeconds(rottenPairDate.getSeconds() + CACHE_FRESH_SECONDS);
+		if ( rottenPairDate < Date.now()) {
+			tagCounterCache.delete(url);
+			return 0;
+		}
+		return tagCounterPair.number;
 	};
     function addStyles() {
         $("<style>")
@@ -78,6 +101,7 @@
 			}).then(function (html) {
 				var countOfTags = getTagCounterFromHtml(html);
 				addTagCounterToSearchResult(itemLinkElement, countOfTags);
+				pushToTagCounterCache(entryLink, countOfTags);
 			}).catch(function (err) {
 				if (err.status == 429) {
 					console.warn('Too many requests. Added the request to fetch later', err.url);
@@ -92,17 +116,31 @@
 		return resultQueue;
 	};
 	async function main(){
-		var queue = [];
+		var cacheQueue = [];
 		var entryContainers = getEntryContainers();
 		entryContainers.each(function(i, entryContainer) {
 			var itemsElements = getItemsFromContainer(entryContainer);
 			itemsElements.each(function(i, itemElement) {
-				queue.push(itemElement);
+				cacheQueue.push(itemElement);
 			});
 		});
 
+		var queue = [];
+
+		for(var itemElement of cacheQueue) {
+			var itemLinkElement = itemElement.firstChild;
+				var entryLink = itemLinkElement.getAttribute("href");
+				var cache = await getTagCounterFromTagCounterCache(entryLink);
+				if (cache > 0) {
+					addTagCounterToSearchResult(itemLinkElement, cache);
+				} else {
+					queue.push(itemElement);
+				}
+		}
+
 		while (queue.length) {
 			queue = await fetchAndHandle(queue);
+			GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(tagCounterCache)));
 		}
 
 	};

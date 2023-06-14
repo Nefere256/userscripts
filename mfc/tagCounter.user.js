@@ -16,26 +16,38 @@
     var FAKE_CLASS_PLACEHOLDER = "what-i-was-looking-for";
 	var REQUEST_DELAY = 1000;
 	var CACHE_FRESH_SECONDS = 10 * 60;
+	var CACHE_SAVE_ENTRIES = [];
 	var CACHE_SAVE_AFTER_SETTING_VALUES_ORDER = 5;
-	var CACHE_SAVE_AFTER_SETTING_VALUES_ORDER_COUNTER = 0;
-	var tagCounterCache = new Map(Object.entries(
-	JSON.parse(await GM.getValue('tagCounterCache', '{}'))));
+	var tagCounterCache;
 	
 	function sleep(ms) {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	};
-	function pushToTagCounterCache(url, tagCounter) {
+	async function getTagCounterCache () {
+		return new Map(Object.entries(
+			JSON.parse(await GM.getValue('tagCounterCache', '{}'))));
+	};
+	async function saveTagCounterCache() {
+		var newTagCounterCache = await getTagCounterCache();
+		for (var entry of CACHE_SAVE_ENTRIES) {
+			newTagCounterCache.set(entry.key, entry.value);
+		}
+		GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(newTagCounterCache)));
+		tagCounterCache = newTagCounterCache;
+	};
+	async function pushToTagCounterCache(url, tagCounter) {
 		if (tagCounter) {
 			var time = Date.now();
-			tagCounterCache.set(url, {'number': tagCounter, 'updatedTime': time});	
-			CACHE_SAVE_AFTER_SETTING_VALUES_ORDER_COUNTER++;
-			if (CACHE_SAVE_AFTER_SETTING_VALUES_ORDER_COUNTER % CACHE_SAVE_AFTER_SETTING_VALUES_ORDER == 0) {
-				GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(tagCounterCache)));
+			var entry = {key: url, value: {'number': tagCounter, 'updatedTime': time}};
+			tagCounterCache.set(entry.key, entry.value);
+			CACHE_SAVE_ENTRIES.push(entry);
+			if (CACHE_SAVE_ENTRIES.length % CACHE_SAVE_AFTER_SETTING_VALUES_ORDER == 0) {
+				saveTagCounterCache();
 			}
 		}
 	};
-	async function getTagCounterFromTagCounterCache(url) {
-		var tagCounterPair = await tagCounterCache.get(url);
+	function getTagCounterFromTagCounterCache(url) {
+		var tagCounterPair = tagCounterCache.get(url);
 		if (tagCounterPair == null) {
 			return 0;
 		}
@@ -132,22 +144,21 @@
 		});
 
 		var queue = [];
-
+		tagCounterCache = await getTagCounterCache();
 		for(var itemElement of cacheQueue) {
 			var itemLinkElement = itemElement.firstChild;
 				var entryLink = itemLinkElement.getAttribute("href");
-				var cache = await getTagCounterFromTagCounterCache(entryLink);
+				var cache = getTagCounterFromTagCounterCache(entryLink);
 				if (cache > 0) {
 					addTagCounterToSearchResult(itemLinkElement, cache);
 				} else {
 					queue.push(itemElement);
 				}
 		}
-
 		while (queue.length) {
 			queue = await fetchAndHandle(queue);
 		}
-		GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(tagCounterCache)));
+		saveTagCounterCache();
 
 	};
 	

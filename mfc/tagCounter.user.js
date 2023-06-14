@@ -16,6 +16,8 @@
     var FAKE_CLASS_PLACEHOLDER = "what-i-was-looking-for";
 	var REQUEST_DELAY = 1000;
 	var CACHE_FRESH_SECONDS = 10 * 60;
+	var CACHE_SAVE_AFTER_SETTING_VALUES_ORDER = 5;
+	var CACHE_SAVE_AFTER_SETTING_VALUES_ORDER_COUNTER = 0;
 	var tagCounterCache = new Map(Object.entries(
 	JSON.parse(await GM.getValue('tagCounterCache', '{}'))));
 	
@@ -25,7 +27,11 @@
 	function pushToTagCounterCache(url, tagCounter) {
 		if (tagCounter) {
 			var time = Date.now();
-			tagCounterCache.set(url, {'number': tagCounter, 'updatedTime': time});
+			tagCounterCache.set(url, {'number': tagCounter, 'updatedTime': time});	
+			CACHE_SAVE_AFTER_SETTING_VALUES_ORDER_COUNTER++;
+			if (CACHE_SAVE_AFTER_SETTING_VALUES_ORDER_COUNTER % CACHE_SAVE_AFTER_SETTING_VALUES_ORDER == 0) {
+				GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(tagCounterCache)));
+			}
 		}
 	};
 	async function getTagCounterFromTagCounterCache(url) {
@@ -140,8 +146,8 @@
 
 		while (queue.length) {
 			queue = await fetchAndHandle(queue);
-			GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(tagCounterCache)));
 		}
+		GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(tagCounterCache)));
 
 	};
 	

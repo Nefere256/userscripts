@@ -4,7 +4,9 @@
 // @version      0.1
 // @description  add tags counter to list of entries. Great for MFC editors!
 // @author       Nefere
-// @match        https://myfigurecollection.net/*
+// @match        https://myfigurecollection.net/entry/*
+// @match        https://myfigurecollection.net/browse.v4.php*
+// @match        https://myfigurecollection.net/browse/calendar/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=myfigurecollection.net
 // @grant        GM.getValue
 // @grant        GM.setValue
@@ -77,18 +79,33 @@
         .appendTo("head");
     };
     function getEntryContainers() {
-        if (window.location.pathname.includes("/entry/")) {
-            var result = $("#wide .results .result");
+		var pathname = window.location.pathname;
+		if (pathname.includes("/entry/")		/* encyclopedia entry */
+		|| pathname.includes("/browse.v4.php")  /* search results with filters */
+		|| pathname.includes("/browse/calendar/")/* calendar page */
+		) {
+            var result = $("#wide .result");
             return result;
         }
         console.log("unsupported getEntryContainers");
         return $(FAKE_CLASS_PLACEHOLDER);
     };
+	function isDetailedList () {
+		var search = window.location.search;
+		var searchParams = new URLSearchParams(search);
+		var outputParam = searchParams.get("output"); /* 0 - detailedList, 1,2 - grid, 3 - diaporama */
+		return outputParam == 0;
+	};
     function getItemsFromContainer(entryContainer) {
         var icons = $(entryContainer).find(".item-icons .item-icon");
         if (icons.length > 0) {
             return icons;
         }
+		var pathname = window.location.pathname;
+        if (pathname.includes("/browse.v4.php") /* search page, detailed list view */
+			&& isDetailedList()) {
+			return $(FAKE_CLASS_PLACEHOLDER);
+			}
         console.log("unsupported getItemsFromContainer");
         return $(FAKE_CLASS_PLACEHOLDER);
     };

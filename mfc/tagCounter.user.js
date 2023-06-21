@@ -17,12 +17,58 @@
 
 (async function () {
     'use strict';
+
+    /**
+     * Name of the class used for a tag indicator container.
+     * It should be not used on the page it's inserted to.
+     **/
     var TAG_CLASSNAME = "us-tag";
+
+    /**
+     * Name of the class that does not appear on the page.
+     * Used to return empty collections of nodes from functions.
+     **/
     var FAKE_CLASS_PLACEHOLDER = "what-i-was-looking-for";
+
+    /**
+     * A time in miliseconds to wait between requests for /entry pages.
+     * Too short time may results in "429 - Too many requests" error responses.
+     * Can be increased with REQUEST_DELAY_MULTIPLIER.
+     **/
     var REQUEST_DELAY = 1000;
+
+    /**
+     * A multipler that is used on REQUEST_DELAY when 429 response error is obtained.
+     * Should be over 1 to properly work.
+     **/
+    var REQUEST_DELAY_MULTIPLIER = 1.1;
+
+    /**
+     * A time in seconds for how long the entry data saved in a cache is considered "fresh" and up to date.
+     * After the entry data is "rotten", it is removed from cache and may be replaced with new data.
+     **/
     var CACHE_FRESH_SECONDS = 10 * 60;
+
+    /**
+     * Map entries for tagCounterCache that are yest to be persisted in the extension storage.
+     **/
     var CACHE_SAVE_ENTRIES = [];
+
+    /**
+     * How many entries have to be added to the cache so the cache can be persisted in the extension storage.
+     * It requires using GM.getValue() and GM.setValue()
+     **/
     var CACHE_SAVE_AFTER_SETTING_VALUES_ORDER = 5;
+
+    /**
+     * A cache for tag count indicated in the entry page.
+     * It's a Map() consisted of:
+     * * keys: pathname of an entry page ("/entry/2")
+     * * values: object with fields:
+     * ** number: integer with number of tags on the entry page (24)
+     * ** updatedTime: timestamp of when the map was updated.
+     * Map entries may be deleted after time indicated in CACHE_FRESH_SECONDS.
+     **/
     var tagCounterCache;
 
     function sleep(ms) {
@@ -149,7 +195,7 @@
                 if (err.status == 429) {
                     console.warn('Too many requests. Added the request to fetch later', err.url);
                     resultQueue.push(itemElement);
-                    REQUEST_DELAY = REQUEST_DELAY * 1.1;
+                    REQUEST_DELAY = REQUEST_DELAY * REQUEST_DELAY_MULTIPLIER;
                     console.info('Increased delay to ' + REQUEST_DELAY);
                 }
             });

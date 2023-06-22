@@ -183,7 +183,11 @@
             var itemLinkElement = itemElement.firstChild;
             var entryLink = itemLinkElement.getAttribute("href");
 
-            fetch(entryLink).then(function (response) {
+            fetch(entryLink, {
+                headers: {
+                    "User-Agent": GM.info.script.name + " " + GM.info.script.version
+                }
+            }).then(function (response) {
                 if (response.ok) {
                     return response.text();
                 }

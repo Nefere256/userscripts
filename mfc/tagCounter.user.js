@@ -50,7 +50,7 @@
     var CACHE_FRESH_SECONDS = 10 * 60;
 
     /**
-     * Map entries for tagCounterCache that are yest to be persisted in the extension storage.
+     * Map entries for tagCounterCache that are yet to be persisted in the extension storage.
      **/
     var CACHE_SAVE_ENTRIES = [];
 
@@ -85,6 +85,7 @@
         }
         GM.setValue('tagCounterCache', JSON.stringify(Object.fromEntries(newTagCounterCache)));
         tagCounterCache = newTagCounterCache;
+        newTagCounterCache.length = 0; /* clear new data as they are persisted */
     };
     async function pushToTagCounterCache(url, tagCounter) {
         if (tagCounter) {

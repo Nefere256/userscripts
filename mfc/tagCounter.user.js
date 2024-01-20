@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MFC tag counter
 // @namespace    https://takkkane.tumblr.com/scripts/mfcTagCounter
-// @version      0.1.2
+// @version      0.1.3
 // @downloadURL	https://raw.githubusercontent.com/Nefere256/userscripts/master/mfc/tagCounter.user.js
 // @description  Adds tags count indicator to list of entries
 // @author       Nefere
@@ -9,6 +9,14 @@
 // @match        https://myfigurecollection.net/entry/*
 // @match        https://myfigurecollection.net/browse.v4.php*
 // @match        https://myfigurecollection.net/browse/calendar/*
+
+// @match        https://myfigurecollection.net/*
+// @match        https://myfigurecollection.net/item/browse/figure/
+// @match        https://myfigurecollection.net/item/browse/goods/
+// @match        https://myfigurecollection.net/item/browse/media/
+// @match        https://myfigurecollection.net/item/browse/calendar/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=myfigurecollection.net
+// @license      MIT
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=myfigurecollection.net
 // @license      MIT
 // @grant        GM.getValue
@@ -136,12 +144,20 @@
     };
     function getEntryContainers() {
         var pathname = window.location.pathname;
+        var search = window.location.search;
+        var searchParams = new URLSearchParams(search);
+        var tbParam = searchParams.get("_tb");
         if (pathname.includes("/entry/") /* encyclopedia entry */
-             || pathname.includes("/browse.v4.php") /* search results with filters */
-             || pathname.includes("/browse/calendar/") /* calendar page */) {
-            var result = $("#wide .result");
+            || pathname.includes("/browse.v4.php") /* search results with filters */
+            || pathname.includes("/browse/calendar/") /* calendar page */
+            || pathname.includes("/item/browse/calendar/") /* new calendar page */
+            || pathname.includes("/item/browse/figure/") /* new figures page */
+            || pathname.includes("/item/browse/goods/") /* new goods page */
+            || pathname.includes("/item/browse/media/") /* new media page */
+            || tbParam !== null) {
+            var result = $("#wide .result:not(.hidden)");
             return result;
-        }
+		}
         console.log("unsupported getEntryContainers");
         return $(FAKE_CLASS_PLACEHOLDER);
     };
